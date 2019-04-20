@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="Actor\AI\AIName.cs" />
     <Compile Include="Actor\Characters\Attack.cs" />
+    <Compile Include="Actor\Characters\MotionName.cs" />
     <Compile Include="Actor\Characters\Player\Bird.cs" />
     <Compile Include="Actor\GameObjects\PlayerAddBlock\BirdAddBlock.cs" />
     <Compile Include="Actor\GameObjects\Block.cs" />

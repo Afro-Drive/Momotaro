@@ -41,7 +41,7 @@ namespace Momotaro.Actor.Characters
 
         //【追加】
         //動作別のモーションディクショナリ（切り取り個数や切り替え時間が異なる場合に使用）
-        protected Dictionary<string, Motion> motionDict;
+        protected Dictionary<MotionName, Motion> motionDict;
         //現在使用中のモーション(更新するモーションの選定用)
         protected Motion currentMotion;
         protected Direction myDirectionX, myDirectionY; //自分の向いてる方向

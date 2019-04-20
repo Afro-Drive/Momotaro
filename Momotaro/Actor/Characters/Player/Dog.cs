@@ -48,19 +48,19 @@ namespace Momotaro.Actor.Characters.Player
             soundTimer = new CountDownTimer(0.5f);
 
             //【追加】モーションの生成・登録
-            motionDict = new Dictionary<string, Motion>()
+            motionDict = new Dictionary<MotionName, Motion>()
             {
-                { "idling", new Motion(new Range(0, 5 - 1), new CountDownTimer(0.25f) )},
-                { "jump", new Motion(new Range(0, 5 - 1), new CountDownTimer(0.25f) )},
-                { "move", new Motion(new Range(0, 5 - 1), new CountDownTimer(0.10f) )},
+                { MotionName.idling, new Motion(new Range(0, 5 - 1), new CountDownTimer(0.25f) )},
+                { MotionName.jump, new Motion(new Range(0, 5 - 1), new CountDownTimer(0.25f) )},
+                { MotionName.move, new Motion(new Range(0, 5 - 1), new CountDownTimer(0.10f) )},
             };
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["idling"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
-                motionDict["jump"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
-                motionDict["move"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.idling].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.jump].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.move].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
-            currentMotion = motionDict["idling"];
+            currentMotion = motionDict[MotionName.idling];
 
             #region　モーションの生成→ディクショナリでの管理に委託
             //movemotion = new Motion();
@@ -171,7 +171,7 @@ namespace Momotaro.Actor.Characters.Player
             //ジャンプ中
             if (isJump)
             {
-                currentMotion = motionDict["jump"];
+                currentMotion = motionDict[MotionName.jump];
                 DrawJumping(renderer, "inu_jumpL", currentMotion);
             }
             //非ジャンプ中
@@ -180,13 +180,13 @@ namespace Momotaro.Actor.Characters.Player
                 //移動中
                 if (base.velocity != Vector2.Zero)
                 {
-                    currentMotion = motionDict["move"];
+                    currentMotion = motionDict[MotionName.move];
                     DrawDirMotion(renderer, "inu_moveL", currentMotion);
                 }
                 //止まっている（アイドリング状態）
                 else
                 {
-                    currentMotion = motionDict["idling"];
+                    currentMotion = motionDict[MotionName.idling];
                     DrawIdling(renderer, "inu_idlingL", currentMotion);
                 }
             }

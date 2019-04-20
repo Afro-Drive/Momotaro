@@ -74,25 +74,25 @@ namespace Momotaro.Actor.Characters.Player
             #endregion　モーションの生成→ディクショナリによる管理に変更
 
             //【追加】モーションの生成・登録
-            motionDict = new Dictionary<string, Motion>()
+            motionDict = new Dictionary<MotionName, Motion>()
             {
-                { "normal", new Motion(new Range(0, 4), new CountDownTimer(0.10f)) }, //普通のアニメーション
-                { "attack", new Motion(new Range(0, 5), new CountDownTimer(0.07f)) }, //攻撃モーション
+                { MotionName.idling, new Motion(new Range(0, 4), new CountDownTimer(0.10f)) }, //普通のアニメーション
+                { MotionName.attack, new Motion(new Range(0, 5), new CountDownTimer(0.07f)) }, //攻撃モーション
             };
 
             //モーション切り取り位置の追加
             for (int i = 0; i <= 4; i++) //アクション以外
             {
-                motionDict["normal"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.idling].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
             for (int i = 0; i <= 5; i++) //アクション
             {
                 //切り取り範囲が異なるので描画時に注意！！
-                motionDict["attack"].Add(i, new Rectangle(new Point(96 * i, 0), new Point(96, 64)));
+                motionDict[MotionName.attack].Add(i, new Rectangle(new Point(96 * i, 0), new Point(96, 64)));
             }
 
             //現在モーションはジャンプモーションに設定
-            currentMotion = motionDict["normal"];
+            currentMotion = motionDict[MotionName.idling];
 
             //【追加】アクションを魅せるためのタイマーを初期化
             actionTimer = new CountDownTimer(0.35f); //アクションモーション1周分の制限時間で
@@ -470,7 +470,7 @@ namespace Momotaro.Actor.Characters.Player
             if (!actionTimer.IsTime()) //アクション用タイマーが起動中はモーションを行う
             {
                 //描画状態を変える
-                currentMotion = motionDict["attack"];
+                currentMotion = motionDict[MotionName.attack];
                     DrawAction(renderer, currentMotion);
             }
             //非攻撃状態
@@ -479,7 +479,7 @@ namespace Momotaro.Actor.Characters.Player
                 //ジャンプ中
                 if (isJump)
                 {
-                    currentMotion = motionDict["normal"];
+                    currentMotion = motionDict[MotionName.idling];
                     DrawJumping(renderer, "momotaro_jumpR", "momotaro_jumpL", currentMotion);
                 }
                 //非ジャンプ中
@@ -488,13 +488,13 @@ namespace Momotaro.Actor.Characters.Player
                     //移動中
                     if (velocity != Vector2.Zero)
                     {
-                        currentMotion = motionDict["normal"];
+                        currentMotion = motionDict[MotionName.idling];
                         DrawDirMotion(renderer, "momotaro_moveR", "momotaro_moveL", currentMotion);
                     }
                     //止まっている（アイドリング状態）
                     else
                     {
-                        currentMotion = motionDict["normal"];
+                        currentMotion = motionDict[MotionName.idling];
                         DrawIdling(renderer, "momotaro_idlingR", "momotaro_idlingL", currentMotion);
                     }
                 }

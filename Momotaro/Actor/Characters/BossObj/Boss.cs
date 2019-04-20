@@ -75,25 +75,25 @@ namespace Momotaro.Actor.Characters.BossObj
 
 
             //【追加】モーションの登録・生成
-            motionDict = new Dictionary<string, Motion>()
+            motionDict = new Dictionary<MotionName, Motion>()
             {
-                {"tackle" , new Motion(new Range(0, 4), new CountDownTimer(0.07f)) },
-                {"damage" , new Motion(new Range(0, 4), new CountDownTimer(0.10f)) },
-                {"idling" , new Motion(new Range(0, 7), new CountDownTimer(0.25f)) },
-                {"smoke_effect" , new Motion(new Range(0,2) , new CountDownTimer(0.25f))  } ,
+                { MotionName.attack , new Motion(new Range(0, 4), new CountDownTimer(0.07f)) },
+                { MotionName.damage , new Motion(new Range(0, 4), new CountDownTimer(0.10f)) },
+                { MotionName.idling , new Motion(new Range(0, 7), new CountDownTimer(0.25f)) },
+                { MotionName.smoke , new Motion(new Range(0,2) , new CountDownTimer(0.25f))  } ,
             };
             for (int i = 0; i < 3; i++)
             {
-                motionDict["smoke_effect"].Add(i, new Rectangle(new Point(i * 64, 0), new Point(64, 64)));
+                motionDict[MotionName.smoke].Add(i, new Rectangle(new Point(i * 64, 0), new Point(64, 64)));
             };
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["tackle"].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
-                motionDict["damage"].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
+                motionDict[MotionName.attack].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
+                motionDict[MotionName.damage].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
             }
             for (int i = 0; i <= 7; i++)
             {
-                motionDict["idling"].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
+                motionDict[MotionName.idling].Add(i, new Rectangle(new Point(i * 128, 0), new Point(128, 144)));
             }
             //現在の使用中モーションはアイドリングに設定
             //currentMotion = motionDict["idling"];
@@ -101,7 +101,7 @@ namespace Momotaro.Actor.Characters.BossObj
             setMotionAndAsset("idling");
 
             //追加　エフェクト用のモーションを初期化
-            effectMotion = motionDict["smoke_effect"];
+            effectMotion = motionDict[MotionName.smoke];
         }
 
         //Turple型を実践してみたが、よくわからん。
@@ -116,7 +116,15 @@ namespace Momotaro.Actor.Characters.BossObj
         /// <param name="motionName">モーション名</param>
         private void setMotionAndAsset(string motionName)
         {
-            currentMotion = motionDict[motionName];
+            MotionName name = MotionName.attack;
+            if (Enum.TryParse<MotionName>(motionName, out name))
+            {
+                if(name.ToString() == "tackle")
+                {
+                    name = (MotionName)(Enum.Parse(typeof(MotionName), "attack"));
+                }
+                currentMotion = motionDict[name];
+            }
             motionAssetWord = motionName;
         }
 
@@ -304,7 +312,7 @@ namespace Momotaro.Actor.Characters.BossObj
             if (invincible)　//被ダメージ状態か？
             {
                 //現在の使用モーションに関係なくダメージモーションを描画
-                DrawDirMotion(renderer, "oni_damage_face", motionDict["damage"]);
+                DrawDirMotion(renderer, "oni_damage_face", motionDict[MotionName.damage]);
                 //追加　ダメージのエフェクトを描画
                 DrawDirMotion(gameDevice.GetRenderer(), "smoke_effect", effectMotion);
 

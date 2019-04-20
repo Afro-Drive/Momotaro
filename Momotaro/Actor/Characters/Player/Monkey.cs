@@ -64,19 +64,19 @@ namespace Momotaro.Actor.Characters.Player
             soundTimer = new CountDownTimer(0.5f);
 
             //【追加】モーションの登録・生成
-            motionDict = new Dictionary<string, Motion>()
+            motionDict = new Dictionary<MotionName, Motion>()
             {
-                {"move", new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
-                {"jump", new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
-                {"idling", new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
+                { MotionName.move, new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
+                { MotionName.jump, new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
+                { MotionName.idling, new Motion(new Range(0, 4), new CountDownTimer(0.20f)) },
             };
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["move"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
-                motionDict["jump"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
-                motionDict["idling"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.move].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.jump].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.idling].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
-            currentMotion = motionDict["idling"];
+            currentMotion = motionDict[MotionName.idling];
 
             #region　モーションの生成・登録→ディクショナリで管理に変更
             //movemotion = new Motion();
@@ -192,7 +192,7 @@ namespace Momotaro.Actor.Characters.Player
             //ジャンプ中
             if (isJump)
             {
-                currentMotion = motionDict["jump"];
+                currentMotion = motionDict[MotionName.jump];
                 DrawJumping(renderer, "saru_jumpL", currentMotion);
             }
             //非ジャンプ中
@@ -201,7 +201,7 @@ namespace Momotaro.Actor.Characters.Player
                 //移動中
                 if (base.velocity != Vector2.Zero)
                 {
-                    currentMotion = motionDict["move"];
+                    currentMotion = motionDict[MotionName.move];
                     if (isRightWallGrip || isLeftWallGrip) //さらに左右どちらかの壁に登っている
                     {
                         DrawClimbing(renderer, currentMotion, color);
@@ -212,7 +212,7 @@ namespace Momotaro.Actor.Characters.Player
                 //止まっている（アイドリング状態）
                 else
                 {
-                    currentMotion = motionDict["idling"];
+                    currentMotion = motionDict[MotionName.idling];
                     if (isRightWallGrip || isLeftWallGrip) //さらに左右どちらかの壁に登っている
                     {
                         DrawIdleClimbing(renderer, currentMotion, color);

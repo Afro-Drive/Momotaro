@@ -46,27 +46,27 @@ namespace Momotaro.Actor.Characters
             SetAI();
 
             //【追加】モーションの生成・追加
-            motionDict = new Dictionary<string, Util.Motion>()
+            motionDict = new Dictionary<MotionName, Util.Motion>()
             {
-                { "attack", new Motion(new Range(0, 4), new CountDownTimer(0.25f)) },
-                { "move", new Motion (new Range(0, 4), new CountDownTimer(0.15f)) },
-                { "idling", new Motion (new Range(0, 4), new CountDownTimer(0.25f)) },
+                { MotionName.attack, new Motion(new Range(0, 4), new CountDownTimer(0.25f)) },
+                { MotionName.move, new Motion (new Range(0, 4), new CountDownTimer(0.15f)) },
+                { MotionName.idling, new Motion (new Range(0, 4), new CountDownTimer(0.25f)) },
             };
 
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["attack"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.attack].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["move"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.move].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
             for (int i = 0; i <= 4; i++)
             {
-                motionDict["idling"].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
+                motionDict[MotionName.idling].Add(i, new Rectangle(new Point(64 * i, 0), new Point(64)));
             }
             //最初のモーションはムーブに設定
-            currentMotion = motionDict["move"];
+            currentMotion = motionDict[MotionName.move];
 
             //【追加】移動方向の設定
             myDirectionX = Direction.Right;
@@ -172,7 +172,7 @@ namespace Momotaro.Actor.Characters
         {
             if (aiName == AIName.Shot) //シュートAIの場合
             {
-                currentMotion = motionDict["attack"];
+                currentMotion = motionDict[MotionName.attack];
                 DrawingAttack(renderer, currentMotion);
             }
             else　//それ以外の場合
@@ -181,7 +181,7 @@ namespace Momotaro.Actor.Characters
                 //ジャンプ中
                 if (ai.IsJump())
                 {
-                    currentMotion = motionDict["move"];
+                    currentMotion = motionDict[MotionName.move];
                     DrawJumping(renderer, "kooni_moveL", currentMotion);
                 }
                 //非ジャンプ中
@@ -190,13 +190,13 @@ namespace Momotaro.Actor.Characters
                     //移動中
                     if (velocity != Vector2.Zero)
                     {
-                        currentMotion = motionDict["move"];
+                        currentMotion = motionDict[MotionName.move];
                         DrawDirMotion(renderer, "kooni_moveL", currentMotion);
                     }
                     //止まっている（アイドリング状態）
                     else
                     {
-                        currentMotion = motionDict["move"];
+                        currentMotion = motionDict[MotionName.move];
                         DrawIdling(renderer, "kooni_moveL", currentMotion);
                     }
                 }
