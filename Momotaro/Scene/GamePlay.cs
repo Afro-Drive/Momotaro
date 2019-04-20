@@ -8,7 +8,8 @@ using Microsoft.Xna.Framework.Input;
 using Momotaro.Device;
 using Momotaro.Actor;
 using Momotaro.Util;
-
+using Momotaro.Actor.Characters.Player;
+using Momotaro.Actor.Characters.BossObj;
 
 namespace Momotaro.Scene
 {

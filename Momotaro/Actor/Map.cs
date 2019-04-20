@@ -7,6 +7,12 @@ using Microsoft.Xna.Framework;
 using Momotaro.Device;
 using Momotaro.Util;
 using Momotaro.Scene;
+using Momotaro.Actor.GameObjects;
+using Momotaro.Actor.GameObjects.DamageObj;
+using Momotaro.Actor.Characters;
+using Momotaro.Actor.AI;
+using Momotaro.Actor.GameObjects.PlayerAddObj;
+using Momotaro.Actor.GameObjects.ItemObj;
 
 namespace Momotaro.Actor
 {

@@ -8,6 +8,7 @@ using Momotaro.Device;
 using Momotaro.Scene;
 using Microsoft.Xna.Framework;
 using System.Diagnostics;
+using Momotaro.Actor.GameObjects;
 
 namespace Momotaro.Util
 {

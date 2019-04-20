@@ -1,5 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Momotaro.Actor;
+using Momotaro.Actor.Characters;
+using Momotaro.Actor.GameObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

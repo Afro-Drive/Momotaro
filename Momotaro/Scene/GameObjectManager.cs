@@ -5,6 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Momotaro.Actor;
+using Momotaro.Actor.Characters;
+using Momotaro.Actor.Characters.BossObj;
+using Momotaro.Actor.Characters.Player;
+using Momotaro.Actor.GameObjects;
 using Momotaro.Device;
 using Momotaro.Util;
 
