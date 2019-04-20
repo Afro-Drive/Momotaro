@@ -19,13 +19,8 @@ namespace Momotaro.Actor.AI
         protected bool isJump;
 
         //継承先で決める変数達
-        protected float jumpSpeed;
         protected float gravity;
         protected Vector2 velocity;
-        protected int jumpInterval;
-        //
-
-        protected int jumpCnt;
 
 
         protected Map map;

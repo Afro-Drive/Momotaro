@@ -19,8 +19,6 @@ namespace Momotaro.Actor.Characters.Player
     {
         //private Vector2 velocity; //移動量
 
-        private Direction dir; //キャラクターの向いている方向
-
         float speed = 4;
         private float fallSpeed; //速度
 
@@ -28,7 +26,6 @@ namespace Momotaro.Actor.Characters.Player
         private int jumpCnt;
 
         private IGameObjectMediator mediator;
-        private Map map;
 
         private bool rightDamage;
         private bool leftDamage;
@@ -166,7 +163,6 @@ namespace Momotaro.Actor.Characters.Player
             Jump();
             Move();
             Action();
-            ChangeDir();
 
             SetDisplayModify();
 
@@ -373,20 +369,6 @@ namespace Momotaro.Actor.Characters.Player
             {
                 fallSpeed = 0.4f;
                 speed = 4.0f;
-            }
-        }
-
-        public void ChangeDir()
-        {
-            if (!isJump && (Input.GetKeyState(Keys.Right) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadRight)
-                || Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickRight)))
-            {
-                dir = Direction.Right;
-            }
-            else if (!isJump && (Input.GetKeyState(Keys.Left) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadLeft)
-                || Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickLeft)))
-            {
-                dir = Direction.Left;
             }
         }
 

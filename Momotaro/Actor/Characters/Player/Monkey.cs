@@ -24,9 +24,6 @@ namespace Momotaro.Actor.Characters.Player
         //private bool isJump;
 
         private IGameObjectMediator mediator;
-        private Map map;
-
-        private float speed = 7;
 
         private bool isRightWallGrip;
         private bool isLeftWallGrip;

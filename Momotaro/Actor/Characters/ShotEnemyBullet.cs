@@ -13,14 +13,10 @@ namespace Momotaro.Actor.Characters
 {
     class ShotEnemyBullet : Character
     {
-        private Vector2 velocity;
-        private float gravity;
-
         public ShotEnemyBullet(Vector2 position, Vector2 velocity,  GameDevice gameDevice)
             : base("shootObj_dot", position, 32, 32, 32, 32, gameDevice)
         {
             this.velocity = velocity;
-            gravity = 0.4f;
         }
 
         public override void Change()

@@ -25,7 +25,6 @@ namespace Momotaro.Actor.Characters.Player
         //private bool isJump;
 
         private IGameObjectMediator mediator;
-        private Map map;
 
         private bool godMod;
 

@@ -30,12 +30,10 @@ namespace Momotaro.Actor.Characters.BossObj
         private int bulletNum = 6; // 玉個数
 
         private Timer CD;
-        private bool isHitPlayer;
         private int vertigo;　//目まい用の整数型？
         private bool isVertigo;　//目まい状態かってこと？
         private float vertigoTime;　//目まいのタイマー
         private float angle;　//気玉を放つ角度
-        private Map map;
 
         private string motionAssetWord = "idling"; //鬼の状態に合わせた文字列(描画モーション名の決定に使用)
         private Motion effectMotion; //追加

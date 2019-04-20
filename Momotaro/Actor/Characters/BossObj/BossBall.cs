@@ -22,7 +22,6 @@ namespace Momotaro.Actor.Characters.BossObj
         private IGameObjectMediator mediator; //仲介者
         private Vector2 playerPos;　//ターゲットの位置情報
         private Timer time;
-        private int state;
         private Vector2 playerV;　//ターゲットの位置情報
 
         /// <summary>
@@ -35,7 +34,6 @@ namespace Momotaro.Actor.Characters.BossObj
         public BossBall (Vector2 position , GameDevice gameDevice , int dir ,IGameObjectMediator mediator) :
             base ("boss_particle",  position , 32,32,32,32 ,gameDevice )
         {
-            state = 1;
             //制限時間10秒のカウントダウンタイマーを生成
             time = new CountDownTimer(10f);
 

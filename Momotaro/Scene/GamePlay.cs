@@ -34,7 +34,6 @@ namespace Momotaro.Scene
 
         private Boss boss;
 
-        private bool beHit;
         private Timer time;
 
         private Sound sound;
@@ -99,7 +98,6 @@ namespace Momotaro.Scene
             isEndFlag = false;
 
             time = new CountDownTimer(5);
-            beHit = false;
 
             //前のシーンがポーズだったら初期化しない
             if (lastSceneName == Scene.Pause)
