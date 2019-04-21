@@ -40,26 +40,6 @@ namespace Momotaro.Scene
             //読み込み対象データ
             string[,] data = new string[,]
             {
-                //{ "black", path},
-                //{ "block", path},
-                //{ "block2", path},
-                //{ "button1", path},
-                { "button2", path},
-                { "door1", path},
-                { "door2", path},
-                { "door", path},
-                //{ "player", path},
-                //{ "puddle", path},
-
-                //簡易画像
-                //{ "inu", path},
-                //{ "momotaro", path},
-                //{ "saru", path},
-                //{ "tori", path},
-                //{"hito",path },
-                //{"teki", path },
-                //{"goal", path },
-                {"kabe", path },
 
                 //シーンごとの背景
                 {"clear", path },
@@ -69,10 +49,11 @@ namespace Momotaro.Scene
                 {"trueEnding",path },
                 {"stagebg",path },
                 {"bossbg",path },
+                {"pausebg", path },
 
+                { "door", path},
                 {"cursor",path },
                 {"stage", path },
-                {"pause", path },
                 {"flame", path },
                 {"thorn", path },
                 {"momo", path },
@@ -85,7 +66,6 @@ namespace Momotaro.Scene
                 {"smoke_effect", path },
                 {"hp",path },
                 {"hp_null",path },
-                //{"switch",path },
                 {"switch_CanPut",path },
                 {"switch_TimeDown",path },
 
@@ -102,46 +82,70 @@ namespace Momotaro.Scene
                 {"momotaro_moveL", path },
                 {"momotaro_idlingR", path },
                 {"momotaro_idlingL", path },
-                //{"momotaro_R",path },
-                //{"momotaro_L",path },
 
                //犬
                 {"inu_moveR", path },
                 {"inu_moveL", path },
-                //{"inu_idlingR", path },
                 {"inu_idlingL", path },
                 {"inu_jumpL", path }, 
+
                 //キジ
                 {"kiji_jumpmotion", path }, 
-                //{"kiji_movemotionR", path },
                 {"kiji_movemotionL", path },
-                //{"kiji_movemotion",path },
-                //{"kiji_jumpmotion",path },
+
                 //猿
-                //{"saru_idlingR", path },
                 {"saru_idlingL", path },
-                //{"saru_moveR", path },
                 {"saru_moveL", path },
-                //{"saru_jumpR", path },
                 {"saru_jumpL", path },
-                //{"saru_climbingR", path },
                 {"saru_climbingL", path },
                 {"saru_idlingclimbingL", path },
+
                 //小鬼
-                {"Oni_Attack", path }, //左方向が抜けています。
-                //{"kooni_moveR", path },
+                {"Oni_Attack", path }, 
                 {"kooni_moveL", path },
                 {"kooni_damage", path },
 
                 //フクロウ
                 {"owl_motion",path },
+
                 //ラスボス「鬼」
                 {"oni_damage_face", path },
                 {"oni_idling_face", path },
-                {"oni_tackle_face", path },
+                {"oni_attack_face", path },
                 //↑アニメーション画像
                 
-                // numberの画像はLoadシーンで使うので、Game1クラスで読み込む
+                // 不要になったリソース
+                //{ "black", path},
+                //{ "block", path},
+                //{ "block2", path},
+                //{ "button1", path},
+                //{ "button2", path},
+                //{ "door1", path},
+                //{ "door2", path},
+                //{ "player", path},
+                //{ "puddle", path},
+
+                //簡易画像
+                //{ "inu", path},
+                //{ "momotaro", path},
+                //{ "saru", path},
+                //{ "tori", path},
+                //{"hito",path },
+                //{"teki", path },
+                //{"goal", path },
+                //{"kabe", path },
+                //{"switch",path },
+                //{"momotaro_R",path },
+                //{"momotaro_L",path },
+                //{"inu_idlingR", path },
+                //{"kiji_movemotionR", path },
+                //{"saru_moveR", path },
+                //{"saru_idlingR", path },
+                //{"saru_jumpR", path },
+                //{"kiji_movemotion",path },
+                //{"kiji_jumpmotion",path },
+                //{"saru_climbingR", path },
+                //{"kooni_moveR", path },
                 //{ "number", path } 
 
                 //必要に応じて自分で追加

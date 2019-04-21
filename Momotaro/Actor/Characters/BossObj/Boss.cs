@@ -78,7 +78,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 { MotionName.attack , new Motion(new Range(0, 4), new CountDownTimer(0.07f)) },
                 { MotionName.damage , new Motion(new Range(0, 4), new CountDownTimer(0.10f)) },
                 { MotionName.idling , new Motion(new Range(0, 7), new CountDownTimer(0.25f)) },
-                { MotionName.smoke , new Motion(new Range(0,2) , new CountDownTimer(0.25f))  } ,
+                { MotionName.smoke ,  new Motion(new Range(0,2) , new CountDownTimer(0.25f)) },
             };
             for (int i = 0; i < 3; i++)
             {
@@ -96,34 +96,32 @@ namespace Momotaro.Actor.Characters.BossObj
             //現在の使用中モーションはアイドリングに設定
             //currentMotion = motionDict["idling"];
             //motionAssetWord = "idling"; //現在モーションに合わせて単語を初期化
-            setMotionAndAsset("idling");
+            setMotionAndAsset(MotionName.idling);
 
             //追加　エフェクト用のモーションを初期化
             effectMotion = motionDict[MotionName.smoke];
         }
 
-        //Turple型を実践してみたが、よくわからん。
-        //private (string assetWord, Motion motion) setMotionAndMotionAsset(string motionName)
-        //{
-        //    return (motionName, motionDict[motionName]);
-        //}
-
         /// <summary>
         /// 使用モーションとそれに合わせた描画アセットの指定
         /// </summary>
         /// <param name="motionName">モーション名</param>
-        private void setMotionAndAsset(string motionName)
+        private void setMotionAndAsset(MotionName motionName)
         {
-            MotionName name = MotionName.attack;
-            if (Enum.TryParse<MotionName>(motionName, out name))
-            {
-                if(name.ToString() == "tackle")
-                {
-                    name = (MotionName)(Enum.Parse(typeof(MotionName), "attack"));
-                }
-                currentMotion = motionDict[name];
-            }
-            motionAssetWord = motionName;
+            #region 列挙型→文字列への変換を削除
+            //MotionName name = MotionName.attack;
+            //if (Enum.TryParse<MotionName>(motionName, out MotionName name) &&
+            //    Enum.IsDefined(typeof(MotionName), name))
+            //{
+            //    //if(name.ToString() == "tackle")
+            //    //{
+            //    //    name = (MotionName)(Enum.Parse(typeof(MotionName), "attack"));
+            //    //}
+            //    currentMotion = motionDict[name];
+            //}
+            #endregion 列挙型→文字列への変換を削除
+            currentMotion = motionDict[motionName];
+            motionAssetWord = motionName.ToString();
         }
 
         public override void Change()
@@ -259,7 +257,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 //待機状態のため、何もしない
 
                 //描画モーションをアイドリングに
-                setMotionAndAsset("idling");
+                setMotionAndAsset(MotionName.idling);
             }
             else if (currentState == BossState.ShotAttack)
             {
@@ -331,7 +329,7 @@ namespace Momotaro.Actor.Characters.BossObj
         private void RunAway(GameTime gameTime)
         {
             //描画するモーションを被ダメージ時のモノにする
-            setMotionAndAsset("damage");
+            setMotionAndAsset(MotionName.damage);
 
             if (stateNum == 0)
             {
@@ -403,7 +401,7 @@ namespace Momotaro.Actor.Characters.BossObj
             if (stateNum == 0)　//サーチモード（ターゲットの位置を確認する）
             {
                 //描画モーションをアイドリングにする
-                setMotionAndAsset("idling");
+                setMotionAndAsset(MotionName.idling);
 
                 CD = new CountDownTimer(0.8f);
                 float a = CD.Now();
@@ -421,7 +419,7 @@ namespace Momotaro.Actor.Characters.BossObj
             else if (stateNum == 1)　//ひたすら突進攻撃
             {
                 //描画モーションを突進にする
-                setMotionAndAsset("tackle");
+                setMotionAndAsset(MotionName.attack);
 
                 velocity = (playerPos + new Vector2(0, -150)) - position;　//移動量を設定
                 if (!invincible)　//ダメージ状態でなければ
@@ -489,7 +487,7 @@ namespace Momotaro.Actor.Characters.BossObj
             if (stateNum == 0)　//サーチモード
             {
                 //描画モーションをアイドリングにする
-                setMotionAndAsset("idling");
+                setMotionAndAsset(MotionName.idling);
 
                 color = Color.Blue;　//青く光を放つ
                 float time;
@@ -520,7 +518,7 @@ namespace Momotaro.Actor.Characters.BossObj
             else if (stateNum == 1)　//気玉を放出
             {
                 //描画モーションを突進にする
-                setMotionAndAsset("tackle");
+                setMotionAndAsset(MotionName.attack);
 
                 CD.Update(gameTime);　//前段階でセットしたタイマーを起動する
                 if (CD.IsTime())　//タイマーが時間切れになったら
@@ -557,7 +555,7 @@ namespace Momotaro.Actor.Characters.BossObj
             if (stateNum == 0)　//準備段階
             {
                 //描画モーションをアイドリングにする
-                setMotionAndAsset("tackle");
+                setMotionAndAsset(MotionName.idling);
                 attackNum = 8;
                 //タイマーを1秒でセット
                 CD = new CountDownTimer(1.5f);
@@ -601,7 +599,7 @@ namespace Momotaro.Actor.Characters.BossObj
                         ChangeState(BossState.SprintAttack);
 
                         //描画モーションをアイドリングにする
-                        setMotionAndAsset("idling");
+                        setMotionAndAsset(MotionName.idling);
                     }
                 }
 
@@ -618,7 +616,7 @@ namespace Momotaro.Actor.Characters.BossObj
             float timeS = 0;
             if (stateNum == 0)　//捜索段階
             {
-                setMotionAndAsset("idling"); //描画するモーションをアイドリングモーションにする
+                setMotionAndAsset(MotionName.idling); //描画するモーションをアイドリングモーションにする
 
                 color = Color.Red;　//赤く発色
                 timeS = time.Now();　//長いカウントアップタイマーの現在時間を取得
@@ -632,7 +630,7 @@ namespace Momotaro.Actor.Characters.BossObj
             }
             else if (stateNum == 1)　//高速突進
             {
-                setMotionAndAsset("tackle"); //描画するモーションをタックルにする
+                setMotionAndAsset(MotionName.attack); //描画するモーションをタックルにする
 
                 CD.Update(gameTime);　//カウントダウンタイマーを起動
                 if (CD.IsTime())　//時間切れになったら
@@ -659,7 +657,7 @@ namespace Momotaro.Actor.Characters.BossObj
             else if (stateNum == 2)
             {
                 //描画モーションをアイドリングにする
-                setMotionAndAsset("idling");
+                setMotionAndAsset(MotionName.idling);
 
                 //紫の気を発する
                 color = Color.Purple;

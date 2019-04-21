@@ -128,6 +128,15 @@ namespace Momotaro.Scene
                 //ステージ番号設定
                 GameData.stageNum = cursor + 1;
             }
+
+#if DEBUG
+            //デバッグ用処理　ボスステージへジャンプ
+            if (Input.GetKeyTrigger(Keys.B))
+            {
+                isEndFlag = true;
+                GameData.stageNum = 5;
+            }
+#endif
         }
     }
 }

@@ -119,7 +119,6 @@ namespace Momotaro.Scene
             //マネージャに追加（当たり判定等のため）
             gameObjectManager.Add(map);
 
-            //GameData.stageNum = 5; //ボス動作確認用の追加
             //マップのロード
             map.Load("stage" + GameData.stageNum.ToString().PadLeft(2, '0') + ".csv", "./csv/");
 
