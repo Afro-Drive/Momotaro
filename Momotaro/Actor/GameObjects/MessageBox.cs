@@ -15,13 +15,20 @@ namespace Momotaro.Actor.GameObjects
 {
     class MessageBox : GameObject
     {
-        private string fileName;
-        private string message;
-        private bool isMessage;
-        private CountDownTimer timer;
+        //フィールド
+        private string fileName;//出力するテキストファイル
+        private string message;//出力メッセージ内容
+        private bool isMessage;//メッセージ出力状態
+        private CountDownTimer timer;//出力時間
 
-        private Motion motion;
+        private Motion motion;//モーション
 
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="position">初期位置</param>
+        /// <param name="gameDevice">ゲームデバイス</param>
+        /// <param name="fileName">出力したいテキストファイル名</param>
         public MessageBox(Vector2 position, GameDevice gameDevice, string fileName)
             : base("owl_motion", position, 64, 64, gameDevice)
         {
@@ -66,11 +73,8 @@ namespace Momotaro.Actor.GameObjects
                 return;
             }
 
-            //if(CheckDirection(chara) == Direction.Bottom)
-            //{
-            message = File.ReadAllText(fileName + ".txt");
+            message = File.ReadAllText("./Content/Text/" + fileName + ".txt");
             isMessage = true;
-            //}
         }
 
         public override void Update(GameTime gameTime)
@@ -90,7 +94,11 @@ namespace Momotaro.Actor.GameObjects
 
         public override void Draw(Renderer renderer)
         {
-            renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), motion.DrawingRange(), Color.White);
+            renderer.DrawTexture(
+                name, 
+                position + gameDevice.GetDisplayModify(), 
+                motion.DrawingRange(), 
+                Color.White);
 
             if (isMessage)
             {

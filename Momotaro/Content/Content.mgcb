@@ -928,3 +928,27 @@
 /processorParam:TextureFormat=Color
 /build:Texture/pausebg.png
 
+#begin Text/momotaro_Introduct.txt
+/copy:Text/momotaro_Introduct.txt
+
+#begin Text/lever_Tutorial.txt
+/copy:Text/lever_Tutorial.txt
+
+#begin Text/dog_Introduct.txt
+/copy:Text/dog_Introduct.txt
+
+#begin Text/bird_Introduct.txt
+/copy:Text/bird_Introduct.txt
+
+#begin Text/bigJump_Tutorial.txt
+/copy:Text/bigJump_Tutorial.txt
+
+#begin Text/attack_Tutorial.txt
+/copy:Text/attack_Tutorial.txt
+
+#begin Text/owl_Cheer.txt
+/copy:Text/owl_Cheer.txt
+
+#begin Text/monkey_Introduct.txt
+/copy:Text/monkey_Introduct.txt
+
