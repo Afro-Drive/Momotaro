@@ -105,19 +105,37 @@ namespace Momotaro.Scene
         public void Update(GameTime gameTime)
         {
             //カーソル移動
-            if (Input.GetKeyTrigger(Keys.Right) || Input.GetKeyTrigger(PlayerIndex.One,Buttons.DPadRight)
-                || Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickRight))
+            if (Input.GetKeyTrigger(Keys.Right) ||
+                Input.GetKeyTrigger(PlayerIndex.One,Buttons.DPadRight) ||
+                Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickRight))
             {
                 cursor += 1;
-                if (cursor > 3)
-                    cursor = 3;
+                if (cursor > sourceRects.Count - 1)
+                    cursor = 0;
             }
-            if (Input.GetKeyTrigger(Keys.Left) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadLeft)
-                || Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickLeft))
+            if (Input.GetKeyTrigger(Keys.Left) || 
+                Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadLeft)||
+                Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickLeft))
             {
                 cursor -= 1;
                 if (cursor < 0)
-                    cursor = 0;
+                    cursor = sourceRects.Count - 1;
+            }
+            if(Input.GetKeyTrigger(Keys.Up) ||
+               Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadUp) ||
+               Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickUp))
+            {
+                cursor -= 2;
+                if (cursor < 0)
+                    cursor = sourceRects.Count - Math.Abs(cursor);
+            }
+            if(Input.GetKeyTrigger(Keys.Down) ||
+               Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadDown) ||
+               Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftThumbstickDown))
+            {
+                cursor += 2;
+                if (cursor >= sourceRects.Count)
+                    cursor = cursor - sourceRects.Count;
             }
 
             //スペースキーが押されたら
