@@ -17,13 +17,7 @@ namespace Momotaro.Actor.Characters.Player
 {
     class Human : Character, IPlayable
     {
-
-        //private Vector2 velocity;
-
         private Direction dir;
-
-        //private bool isJump;
-
         private IGameObjectMediator mediator;
 
         private bool godMod;
@@ -36,9 +30,6 @@ namespace Momotaro.Actor.Characters.Player
         private Timer soundTimer;
 
         private Timer actionTimer; //【追加】アクションモーションを魅せるためのタイマー
-
-        //private Motion movemotion;
-        //private Motion jumpmotion;
 
         public Human(Vector2 position, GameDevice gameDevice, IGameObjectMediator mediator)
             : base("momotaro_R", position, 64, 64, 40, 60, gameDevice)
@@ -526,18 +517,5 @@ namespace Momotaro.Actor.Characters.Player
             }
         }
 
-
-        //public override void Draw(Renderer renderer)
-        //{
-        //    if (isJump)
-        //    {
-        //        renderer.DrawTexture("kiji_jumpmotion", position + gameDevice.GetDisplayModify(), jumpmotion.DrawingRange());
-        //    }
-        //    else
-        //    {
-
-        //        renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), movemotion.DrawingRange());
-        //    }
-        //}
     }
 }

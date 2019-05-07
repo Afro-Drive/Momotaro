@@ -17,12 +17,9 @@ namespace Momotaro.Actor.Characters.Player
 {
     class Bird :Character, IPlayable
     {
-        //private Vector2 velocity; //移動量
-
         float speed = 4;
         private float fallSpeed; //速度
 
-        //private bool isJump;
         private int jumpCnt;
 
         private IGameObjectMediator mediator;
@@ -33,9 +30,6 @@ namespace Momotaro.Actor.Characters.Player
 
         private Sound sound;
         private Timer soundTimer;
-
-        //private Motion movemotion;
-        //private Motion jumpmotion;
 
         public Bird(Vector2 position, GameDevice gameDevice, IGameObjectMediator mediator)
             : base("kiji_movemotion", position, 64, 64, 40, 60, gameDevice)
@@ -438,19 +432,5 @@ namespace Momotaro.Actor.Characters.Player
                 }
             }
         }
-
-        //public override void Draw(Renderer renderer)
-        //{
-        //    if (isJump)
-        //    {
-        //        renderer.DrawTexture("kiji_jumpmotion", position + gameDevice.GetDisplayModify(), jumpmotion.DrawingRange());
-        //    }
-        //    else
-        //    {
-                
-        //        renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), movemotion.DrawingRange());
-        //    }
-            
-        //}
     }
 }

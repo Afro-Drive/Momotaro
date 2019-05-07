@@ -254,33 +254,6 @@ namespace Momotaro.Actor
         /// </summary>
         private void HitObj()
         {
-            //foreach (var list in mapList) //listはList<GameObject>型
-            //{
-            //    foreach (var obj in list) //objはGameObject型
-            //    {
-            //        foreach (var chara in mediator.GetCharacterList())
-            //        {
-            //            //objがSpaceクラスのオブジェクトなら次へ
-            //            if (obj is Space)
-            //            {
-            //                continue;
-            //            }
-
-            //            if (mediator.GetPlayer() == null)
-            //            {
-            //                continue;
-            //            }
-            //            else
-            //            {
-            //                if (obj.GetRectangle().Intersects(chara.GetRectangle()))
-            //                {
-            //                    obj.HitChara(chara);
-            //                    chara.HitObj(obj);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
             foreach (var chara in mediator.GetCharacterList())
             {
                 Vector2 pos = chara.GetPosition();

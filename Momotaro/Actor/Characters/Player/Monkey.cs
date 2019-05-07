@@ -19,10 +19,6 @@ namespace Momotaro.Actor.Characters.Player
     class Monkey : Character, IPlayable
 
     {
-        //private Vector2 velocity;
-
-        //private bool isJump;
-
         private IGameObjectMediator mediator;
 
         private bool isRightWallGrip;
@@ -38,9 +34,6 @@ namespace Momotaro.Actor.Characters.Player
 
         private Sound sound;
         private Timer soundTimer;
-
-        //private Motion movemotion;
-        //private Motion jumpmotion;
 
         public Monkey(Vector2 position, GameDevice gameDevice, IGameObjectMediator mediator)
             : base("saru", position, 64, 64, 40, 60, gameDevice)
@@ -572,18 +565,5 @@ namespace Momotaro.Actor.Characters.Player
                 }
             }
         }
-
-        //public override void Draw(Renderer renderer)
-        //{
-        //    if (isJump)
-        //    {
-        //        renderer.DrawTexture("kiji_jumpmotion", position + gameDevice.GetDisplayModify(), jumpmotion.DrawingRange());
-        //    }
-        //    else
-        //    {
-
-        //        renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), movemotion.DrawingRange());
-        //    }
-        //}
     }
 }

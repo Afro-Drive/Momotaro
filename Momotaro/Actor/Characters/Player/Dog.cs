@@ -17,10 +17,6 @@ namespace Momotaro.Actor.Characters.Player
 {
     class Dog : Character ,IPlayable
     {
-        //private Vector2 velocity;
-
-        //private bool isJump;
-
         private IGameObjectMediator mediator;
 
         private bool rightDamage;
@@ -29,9 +25,6 @@ namespace Momotaro.Actor.Characters.Player
 
         private Sound sound;
         private Timer soundTimer;
-
-        //private Motion movemotion;
-        //private Motion jumpmotion;
 
         public Dog(Vector2 position, GameDevice gameDevice, IGameObjectMediator mediator)
             : base("inu", position, 64, 64, 64, 40, gameDevice)
@@ -411,17 +404,5 @@ namespace Momotaro.Actor.Characters.Player
                 }
             }
         }
-
-        //public override void Draw(Renderer renderer)
-        //{
-        //    if (isJump)
-        //    {
-        //        renderer.DrawTexture("kiji_jumpmotion", position + gameDevice.GetDisplayModify(), jumpmotion.DrawingRange());
-        //    }
-        //    else
-        //    {
-        //        renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), movemotion.DrawingRange());
-        //    }
-        //}
     }
 }
