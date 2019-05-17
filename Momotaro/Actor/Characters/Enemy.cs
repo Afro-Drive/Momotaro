@@ -262,7 +262,10 @@ namespace Momotaro.Actor.Characters
         /// </summary>
         private void UpdateShotMyDir()
         {
-            float targetPosX = mediator.GetPlayer().GetPosition().X;
+            Character target = mediator.GetPlayer();
+            if (target == null) return;
+
+            float targetPosX = target.GetPosition().X;
 
             myDirectionX = Direction.Right;
             if (targetPosX < this.position.X)
