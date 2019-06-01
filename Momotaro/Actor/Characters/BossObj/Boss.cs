@@ -50,6 +50,8 @@ namespace Momotaro.Actor.Characters.BossObj
 
             color = Color.White;
             this.mediator = mediator;　//仲介者を引数受け取り
+            map = mediator.GetMap();
+
             time = new CountUpTimer(10000); //カウントアップタイマーを1万フレーム(200秒弱)で初期化
             currentState = BossState.JumpAttack;　//戦闘態勢は「高速突進」で初期化
             stateNum = 0;
@@ -57,7 +59,21 @@ namespace Momotaro.Actor.Characters.BossObj
             isVertigo = false;
             isDeadFlag = false; //死亡フラグは偽で初期化
 
+            EntryMotions();
+        }
 
+        /// <summary>
+        /// 使用モーションとそれに合わせた描画アセットの指定
+        /// </summary>
+        /// <param name="motionName">モーション名</param>
+        private void setMotionAndAsset(MotionName motionName)
+        {
+            currentMotion = motionDict[motionName];
+            motionAssetWord = motionName.ToString();
+        }
+
+        private void EntryMotions()
+        {
             //【追加】モーションの登録・生成
             motionDict = new Dictionary<MotionName, Motion>()
             {
@@ -89,28 +105,6 @@ namespace Momotaro.Actor.Characters.BossObj
         }
 
         /// <summary>
-        /// 使用モーションとそれに合わせた描画アセットの指定
-        /// </summary>
-        /// <param name="motionName">モーション名</param>
-        private void setMotionAndAsset(MotionName motionName)
-        {
-            #region 列挙型→文字列への変換を削除
-            //MotionName name = MotionName.attack;
-            //if (Enum.TryParse<MotionName>(motionName, out MotionName name) &&
-            //    Enum.IsDefined(typeof(MotionName), name))
-            //{
-            //    //if(name.ToString() == "tackle")
-            //    //{
-            //    //    name = (MotionName)(Enum.Parse(typeof(MotionName), "attack"));
-            //    //}
-            //    currentMotion = motionDict[name];
-            //}
-            #endregion 列挙型→文字列への変換を削除
-            currentMotion = motionDict[motionName];
-            motionAssetWord = motionName.ToString();
-        }
-
-        /// <summary>
         /// キャラクターオブジェクトとの衝突判定
         /// </summary>
         /// <param name="character"></param>
@@ -119,7 +113,6 @@ namespace Momotaro.Actor.Characters.BossObj
             //攻撃オブジェクトに接触
             if (character is Attack)
             {
-
                 //ダメージ状態にするための設定をセット
                 invincibleTime = new CountDownTimer(0.05f);　//ダメージ状態のタイマーをセット　
                 invincible = true;　//ダメージ状態を真にする
@@ -167,9 +160,6 @@ namespace Momotaro.Actor.Characters.BossObj
         public override void HitObj(GameObject obj)
         {
             //鬼はブロックなどモノともしない！！！
-            if (obj is Block)
-            {
-            }
         }
 
         /// <summary>

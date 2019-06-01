@@ -49,7 +49,11 @@ namespace Momotaro.Actor.Characters.Player
                 new Bird  (Vector2.Zero, GameDevice.Instance(), mediator),
                 new Monkey(Vector2.Zero, GameDevice.Instance(), mediator)
             };
-            Add(PlayerName.Momotaro, addPlayers[GameData.pCount]);
+
+            for (int i = 0; i < GameData.pCount; i++)
+            {
+                Add((PlayerName)i, addPlayers[i]);
+            }
             entryPlayer = (Character)playerDict[PlayerName.Momotaro];
         }
 
@@ -74,6 +78,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 return;
             }
+
             playerDict.Add(playerKey, playerValue);
         }
 
@@ -83,9 +88,9 @@ namespace Momotaro.Actor.Characters.Player
         /// <param name="num">切り替えの方向</param>
         public void Change(PlayerName next)
         {
-            if (!playerDict.ContainsKey(next) ||              
+            if (!playerDict.ContainsKey(next) ||
                 playerDict[next] == entryPlayer)
-                return; 
+                return;
 
             sound.PlaySE("p_change");
 
@@ -97,7 +102,7 @@ namespace Momotaro.Actor.Characters.Player
             //キャラクターの右下の位置を取得する
             position = new Vector2(
                 position.X,
-                position.Y + entryPlayer.HitH+ entryPlayer.HeightMargin);
+                position.Y + entryPlayer.HitH + entryPlayer.HeightMargin);
 
             ((IPlayable)entryPlayer).Change();
 
@@ -105,7 +110,7 @@ namespace Momotaro.Actor.Characters.Player
             //変更元のキャラの右下の位置をもとにポジションを取得
             position = new Vector2(
                 position.X,
-                position.Y - nextPlayer.HitH- nextPlayer.HeightMargin);
+                position.Y - nextPlayer.HitH - nextPlayer.HeightMargin);
 
             //取得した位置を設定
             nextPlayer.Position = position;
@@ -152,6 +157,7 @@ namespace Momotaro.Actor.Characters.Player
 
         public void Update(GameTime gameTime)
         {
+            MathHelper.Clamp(GameData.pCount, 0, 3);
             Add((PlayerName)GameData.pCount, addPlayers[GameData.pCount]);
         }
     }

@@ -48,7 +48,7 @@ namespace Momotaro.Scene
             gameObjectManager = new GameObjectManager(score);
         }
 
-        
+
 
         /// <summary>
         /// 描画
@@ -58,19 +58,11 @@ namespace Momotaro.Scene
         {
             renderer.Begin();
 
-            if(GameData.stageNum >= 4)　//【変更】ステージ4も背景をまがまがしく
-            {
-                renderer.DrawTexture("bossbg", Vector2.Zero);
-            }
-            else
-            {
-                renderer.DrawTexture("stagebg", Vector2.Zero);
-            }
-            
+            DrawBackGround(renderer);
 
             //マップの描画
             map.Draw(renderer);
-            
+
             //オブジェクトマネージャーの描画
             gameObjectManager.Draw(renderer);
 
@@ -80,7 +72,7 @@ namespace Momotaro.Scene
             renderer.End();
         }
 
-        
+
 
         /// <summary>
         /// 初期化
@@ -98,12 +90,11 @@ namespace Momotaro.Scene
             map = new Map(GameDevice.Instance(), gameObjectManager);
 
             //キャラの制限をステージ番号で設定
-            GameData.pCount = GameData.stageNum - 1;
-            MathHelper.Clamp(GameData.pCount, 0, 3);
+            int playerLeng = GameData.stageNum - 1;
+            GameData.pCount = MathHelper.Clamp(playerLeng, 0, 3);
 
             //オブジェクトマネージャーの初期化
             gameObjectManager.Initialize();
-
             //マネージャに追加（当たり判定等のため）
             gameObjectManager.Add(map);
 
@@ -115,33 +106,15 @@ namespace Momotaro.Scene
 
             //プレイヤーマネージャーの実体生成
             playerManager = new PlayerManager(gameObjectManager);
-
-            //プレイヤーマネージャー初期化
             playerManager.Initialize();
-            //最初のキャラを設定（引数はポジション）
-            if (GameData.stageNum == 3)
-            {
-                playerManager.SetStartPlayer(new Vector2(4, 67) * 64);
-            }
-            else if(GameData.stageNum == 4)
-            {
-                playerManager.SetStartPlayer(new Vector2(3, 10) * 64);
-            }
-            else if(GameData.stageNum == 5)
-            {
-                playerManager.SetStartPlayer(new Vector2(30, 20) * 64);
-            }
-            else
-            {
-                playerManager.SetStartPlayer(new Vector2(3, 12) * 64);
-            }
 
+            PutPlayerOn();
 
             //ボスの設定 
-            boss = new Boss(new Vector2(40, 23) * 64, GameDevice.Instance(), gameObjectManager);
             //ステージ05になったらボスを追加する
             if (GameData.stageNum == 5)
-            {               
+            {
+                boss = new Boss(new Vector2(40, 23) * 64, GameDevice.Instance(), gameObjectManager);
                 gameObjectManager.Add(boss);
             }
         }
@@ -177,20 +150,62 @@ namespace Momotaro.Scene
         /// <param name="gameTime">ゲーム時間</param>
         public void Update(GameTime gameTime)
         {
-            if (Input.GetKeyTrigger(Keys.D))
-            {
-                Console.WriteLine("Press D");
-            }
-
             map.Update(gameTime);
             gameObjectManager.Update(gameTime);
             countUpTimer.Update(gameTime);
-            
-            if(GameData.stageNum==5)
+
+            PlayBGM();
+
+            playerManager.AcceptInput();
+            playerManager.Update(gameTime);
+
+            IsClear();
+            IsBossDead();
+            IsPlayerDead();
+
+            GoPause();
+        }
+
+        private void PutPlayerOn()
+        {
+            //最初のキャラを設定（引数はポジション）
+            if (GameData.stageNum == 3)
+            {
+                playerManager.SetStartPlayer(new Vector2(4, 67) * 64);
+            }
+            else if (GameData.stageNum == 4)
+            {
+                playerManager.SetStartPlayer(new Vector2(3, 10) * 64);
+            }
+            else if (GameData.stageNum == 5)
+            {
+                playerManager.SetStartPlayer(new Vector2(30, 20) * 64);
+            }
+            else
+            {
+                playerManager.SetStartPlayer(new Vector2(3, 12) * 64);
+            }
+        }
+
+        private void DrawBackGround(Renderer renderer)
+        {
+            if (GameData.stageNum >= 4)　//【変更】ステージ4も背景をまがまがしく
+            {
+                renderer.DrawTexture("bossbg", Vector2.Zero);
+            }
+            else
+            {
+                renderer.DrawTexture("stagebg", Vector2.Zero);
+            }
+        }
+
+        private void PlayBGM()
+        {
+            if (GameData.stageNum == 5)
             {
                 sound.PlayBGM("bgm_boss");
             }
-            else if( GameData.stageNum == 4)
+            else if (GameData.stageNum == 4)
             {
                 sound.PlayBGM("bgm_stage4");
             }
@@ -198,44 +213,47 @@ namespace Momotaro.Scene
             {
                 sound.PlayBGM("bgm_stage");
             }
+        }
 
-            //1キーが押されたとき終了
-            if (Input.GetKeyTrigger(Keys.D1))
+        private void GoPause()
+        {
+            if (Input.GetKeyTrigger(Keys.P) || 
+                Input.GetKeyTrigger(PlayerIndex.One, Buttons.Start))
             {
                 isEndFlag = true;
+                nextScene = Scene.Pause;
             }
-            playerManager.AcceptInput();
-            playerManager.Update(gameTime);
+        }
 
-            //クリアしたとき
-            if (playerManager.IsClear())
-            {
-                sound.StopBGM();
-                nextScene = Scene.Ending;
-                
-                isEndFlag = true;
-            }
-
-            //ボスを倒したとき
-            if(boss.IsDead())
-            {
-                nextScene = Scene.TrueEnding;
-                sound.StopBGM();
-                isEndFlag = true;
-            }
-
-            //死んだとき
-            if (gameObjectManager.IsPlayerDead() || gameObjectManager.GetHp() <= 0)
+        private void IsPlayerDead()
+        {
+            if (gameObjectManager.IsPlayerDead() || 
+                gameObjectManager.GetHp() <= 0)
             {
                 sound.StopBGM();
                 isEndFlag = true;
                 nextScene = Scene.GameOver;
             }
-            //ポーズボタンが押された時
-            if (Input.GetKeyTrigger(Keys.P) || Input.GetKeyTrigger(PlayerIndex.One,Buttons.Start))
+        }
+
+        private void IsBossDead()
+        {
+            if (boss != null && boss.IsDead())
             {
+                nextScene = Scene.TrueEnding;
+                sound.StopBGM();
                 isEndFlag = true;
-                nextScene = Scene.Pause;
+            }
+        }
+
+        private void IsClear()
+        {
+            if (playerManager.IsClear())
+            {
+                sound.StopBGM();
+                nextScene = Scene.Ending;
+
+                isEndFlag = true;
             }
         }
     }
