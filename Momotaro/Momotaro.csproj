@@ -47,6 +47,7 @@
     <Compile Include="Actor\Characters\CharaState.cs" />
     <Compile Include="Actor\Characters\MotionName.cs" />
     <Compile Include="Actor\Characters\Player\Bird.cs" />
+    <Compile Include="Actor\Characters\Player\PlayerName.cs" />
     <Compile Include="Actor\GameObjects\Direction.cs" />
     <Compile Include="Actor\GameObjects\PlayerAddBlock\BirdAddBlock.cs" />
     <Compile Include="Actor\GameObjects\Block.cs" />

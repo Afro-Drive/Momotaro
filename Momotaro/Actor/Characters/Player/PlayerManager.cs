@@ -10,18 +10,6 @@ using Momotaro.Scene;
 
 namespace Momotaro.Actor.Characters.Player
 {
-    /// <summary>
-    /// Playableキャラの列挙型
-    /// 仲間になる順番で列挙されており、ステージ番号と対応する
-    /// </summary>
-    enum PlayerName
-    {
-        Momotaro,
-        Inu,
-        Kiji,
-        Saru,
-    }
-
     class PlayerManager
     {
         private Dictionary<PlayerName, IPlayable> playerDict; //プレイヤーディクショナリ
@@ -29,7 +17,6 @@ namespace Momotaro.Actor.Characters.Player
         private Character entryPlayer; //現在使用中のキャラ
 
         private IGameObjectMediator mediator; //仲介者
-
         private Sound sound;
 
         /// <summary>
