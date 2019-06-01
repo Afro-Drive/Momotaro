@@ -65,9 +65,6 @@ namespace Momotaro.Actor.Characters.BossObj
                 num = 270; 
             }
         }
-        public override void Change()
-        {
-        }
 
         public override void HitChara(Character character)
         {

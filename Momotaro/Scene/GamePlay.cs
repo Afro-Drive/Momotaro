@@ -21,22 +21,16 @@ namespace Momotaro.Scene
         private bool isEndFlag;//終了フラグ
 
         private Map map; //マップ
-        
-        private GameObjectManager gameObjectManager; //ゲームオブジェクトマネージャ
+        private Sound sound;
 
+        private GameObjectManager gameObjectManager; //ゲームオブジェクトマネージャ
         private PlayerManager playerManager; //切り替え用のプレイヤーマネージャー
+        private Boss boss;
 
         private Timer countUpTimer; //カウントアップタイマー
-
         private Score score; //スコア管理
 
         private Scene nextScene;
-
-        private Boss boss;
-
-        private Timer time;
-
-        private Sound sound;
 
         /// <summary>
         /// コンストラクタ
@@ -47,9 +41,8 @@ namespace Momotaro.Scene
             isEndFlag = false;
 
             this.score = score;
-            sound = GameDevice.Instance().GetSound();
-
             countUpTimer = timer;
+            sound = GameDevice.Instance().GetSound();
 
             //オブジェクトマネージャーの実体生成
             gameObjectManager = new GameObjectManager(score);
@@ -97,8 +90,6 @@ namespace Momotaro.Scene
             //シーン終了フラグを初期化
             isEndFlag = false;
 
-            time = new CountDownTimer(5);
-
             //前のシーンがポーズだったら初期化しない
             if (lastSceneName == Scene.Pause)
                 return;
@@ -107,11 +98,8 @@ namespace Momotaro.Scene
             map = new Map(GameDevice.Instance(), gameObjectManager);
 
             //キャラの制限をステージ番号で設定
-            GameData.pCount = GameData.stageNum;
-            if(GameData.pCount>4)
-            {
-                GameData.pCount = 4;
-            }
+            GameData.pCount = GameData.stageNum - 1;
+            MathHelper.Clamp(GameData.pCount, 0, 3);
 
             //オブジェクトマネージャーの初期化
             gameObjectManager.Initialize();
@@ -128,12 +116,6 @@ namespace Momotaro.Scene
             //プレイヤーマネージャーの実体生成
             playerManager = new PlayerManager(gameObjectManager);
 
-            //プレイヤーマネージャーに使うキャラを追加
-            //ここで追加した順番に切り替わります
-            playerManager.Add(new Human(Vector2.Zero, GameDevice.Instance(), gameObjectManager));
-            playerManager.Add(new Dog(Vector2.Zero, GameDevice.Instance(), gameObjectManager));
-            playerManager.Add(new Bird(Vector2.Zero, GameDevice.Instance(), gameObjectManager));
-            playerManager.Add(new Monkey(Vector2.Zero, GameDevice.Instance(), gameObjectManager));
             //プレイヤーマネージャー初期化
             playerManager.Initialize();
             //最初のキャラを設定（引数はポジション）
@@ -154,7 +136,6 @@ namespace Momotaro.Scene
                 playerManager.SetStartPlayer(new Vector2(3, 12) * 64);
             }
 
-            countUpTimer.Initialize();//タイマー初期化
 
             //ボスの設定 
             boss = new Boss(new Vector2(40, 23) * 64, GameDevice.Instance(), gameObjectManager);
@@ -163,12 +144,6 @@ namespace Momotaro.Scene
             {               
                 gameObjectManager.Add(boss);
             }
-            //GameObjectCSVParser parser = new GameObjectCSVParser(gameObjectManager);
-            //var dataList = parser.Parse("GameObjectParameter.csv", "./csv/");
-            //foreach(var data in dataList)
-            //{
-            //    gameObjectManager.Add(data);
-            //}
         }
 
         /// <summary>
@@ -202,6 +177,11 @@ namespace Momotaro.Scene
         /// <param name="gameTime">ゲーム時間</param>
         public void Update(GameTime gameTime)
         {
+            if (Input.GetKeyTrigger(Keys.D))
+            {
+                Console.WriteLine("Press D");
+            }
+
             map.Update(gameTime);
             gameObjectManager.Update(gameTime);
             countUpTimer.Update(gameTime);
@@ -224,25 +204,12 @@ namespace Momotaro.Scene
             {
                 isEndFlag = true;
             }
-
-            //Cキーが押されたときキャラ切り替え
-            if(Input.GetKeyTrigger(Keys.C) || Input.GetKeyTrigger(PlayerIndex.One,Buttons.RightTrigger))
-            {
-                playerManager.Change(1);
-            }
-            //Vキーが押されたときキャラ切り替え
-            if (Input.GetKeyTrigger(Keys.V) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.LeftTrigger))
-            {
-                playerManager.Change(-1);
-            }
+            playerManager.AcceptInput();
+            playerManager.Update(gameTime);
 
             //クリアしたとき
             if (playerManager.IsClear())
             {
-                //if (GameData.stageNum == 1) //最終ステージのとき
-                //{
-                //    nextScene = Scene.TrueEnding;
-                //}
                 sound.StopBGM();
                 nextScene = Scene.Ending;
                 

@@ -80,7 +80,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
             //Active状態だったらpCountを３にする(Monkeyに切り替えられるようになる)
             if (isActive)
             {
-                GameData.pCount = 4;
+                GameData.pCount = 3;
                 isActive = false;
             }
         }

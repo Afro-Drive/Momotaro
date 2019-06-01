@@ -15,5 +15,6 @@ namespace Momotaro.Actor.Characters.Player
         void Move();
         void Jump();
         void Action();
+        void Change();
     }
 }

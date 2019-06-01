@@ -4,16 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 using Momotaro.Device;
 using Momotaro.Scene;
 
 namespace Momotaro.Actor.Characters.Player
-{ 
+{
+    /// <summary>
+    /// Playableキャラの列挙型
+    /// 仲間になる順番で列挙されており、ステージ番号と対応する
+    /// </summary>
+    enum PlayerName
+    {
+        Momotaro,
+        Inu,
+        Kiji,
+        Saru,
+    }
+
     class PlayerManager
     {
-        private List<Character> playerList; //プレイヤーリスト
-        private int pNum; //リストからの取り出し用番号
-        private int pCnt; //切り替え用番号
+        private Dictionary<PlayerName, IPlayable> playerDict; //プレイヤーディクショナリ
+        private List<IPlayable> addPlayers;
+        private Character entryPlayer; //現在使用中のキャラ
 
         private IGameObjectMediator mediator; //仲介者
 
@@ -29,14 +42,12 @@ namespace Momotaro.Actor.Characters.Player
             sound = GameDevice.Instance().GetSound();
 
             //リストの生成
-            if (playerList != null)
+            if (playerDict != null)
             {
-                playerList.Clear();
+                playerDict.Clear();
+                return;
             }
-            else
-            {
-                playerList = new List<Character>();
-            }
+            playerDict = new Dictionary<PlayerName, IPlayable>();
         }
 
         /// <summary>
@@ -44,8 +55,15 @@ namespace Momotaro.Actor.Characters.Player
         /// </summary>
         public void Initialize()
         {
-            pNum = 0;
-            pCnt = 0;
+            addPlayers = new List<IPlayable>()
+            {
+                new Human (Vector2.Zero, GameDevice.Instance(), mediator),
+                new Dog   (Vector2.Zero, GameDevice.Instance(), mediator),
+                new Bird  (Vector2.Zero, GameDevice.Instance(), mediator),
+                new Monkey(Vector2.Zero, GameDevice.Instance(), mediator)
+            };
+            Add(PlayerName.Momotaro, addPlayers[GameData.pCount]);
+            entryPlayer = (Character)playerDict[PlayerName.Momotaro];
         }
 
         /// <summary>
@@ -54,77 +72,86 @@ namespace Momotaro.Actor.Characters.Player
         /// <param name="position"></param>
         public void SetStartPlayer(Vector2 position)
         {
-            Character newChara = GetPlayer();
-            newChara.SetPosition(position);
-            mediator.AddCharacter(newChara);
+            entryPlayer.SetPosition(position);
+            mediator.AddCharacter(entryPlayer);
         }
 
         /// <summary>
         /// リストにプレイヤー追加
         /// </summary>
-        /// <param name="obj"></param>
-        public void Add(Character obj)
+        /// <param name="playerValue"></param>
+        public void Add(PlayerName playerKey, IPlayable playerValue)
         {
-            if(obj==null)
+            if (playerValue == null ||
+                playerDict.ContainsKey(playerKey))
             {
                 return;
             }
-            playerList.Add(obj);
+            playerDict.Add(playerKey, playerValue);
         }
 
         /// <summary>
         /// キャラクター切り替え
         /// </summary>
         /// <param name="num">切り替えの方向</param>
-        public void Change(int num)
+        public void Change(PlayerName next)
         {
-            if (GameData.pCount == 1)
-            {
-                return; //キャラが１体のとき、処理をしない
-            }
-            else
-            {
-                sound.PlaySE("p_change");
-                //現在動いているキャラから位置を取得
-                Vector2 position = playerList[pNum].GetPosition();
+            if (!playerDict.ContainsKey(next) ||              
+                playerDict[next] == entryPlayer)
+                return; 
 
-                //当たり判定の違いによって位置がずれて埋まってしまうのを修正(1)
-                //キャラクターの右下の位置を取得する
-                position = new Vector2(position.X, position.Y + playerList[pNum].GetHitH() + playerList[pNum].GetHeigthMargin());
+            sound.PlaySE("p_change");
 
-                playerList[pNum].Change();
+            Character nextPlayer = (Character)playerDict[next];
+            //現在動いているキャラから位置を取得
+            Vector2 position = entryPlayer.GetPosition();
 
-                //リスト番号の割り出し
-                pCnt += num;
-                if (pCnt < 0)
-                {
-                    pCnt = pCnt + GameData.pCount;
-                }
-                pNum = pCnt % GameData.pCount;
+            //当たり判定の違いによって位置がずれて埋まってしまうのを修正(1)
+            //キャラクターの右下の位置を取得する
+            position = new Vector2(
+                position.X,
+                position.Y + entryPlayer.GetHitH() + entryPlayer.GetHeigthMargin());
 
-                //追加キャラをリストから取得
-                Character addPlayer = GetPlayer();
+            ((IPlayable)entryPlayer).Change();
 
-                //当たり判定の違いによって位置がずれて埋まってしまうのを修正(2)
-                //変更元のキャラの右下の位置をもとにポジションを取得
-                position = new Vector2(position.X, position.Y - playerList[pNum].GetHitH() - playerList[pNum].GetHeigthMargin());
+            //当たり判定の違いによって位置がずれて埋まってしまうのを修正(2)
+            //変更元のキャラの右下の位置をもとにポジションを取得
+            position = new Vector2(
+                position.X,
+                position.Y - nextPlayer.GetHitH() - nextPlayer.GetHeigthMargin());
 
-                //取得した位置を設定
-                addPlayer.SetPosition(position);
-                //切り替えフラグをfalseに設定
-                addPlayer.ChangeFlagTurn();
-                //次のキャラを追加
-                mediator.AddCharacter(addPlayer);
-            }
+            //取得した位置を設定
+            nextPlayer.SetPosition(position);
+            //操作キャラを上書き
+            entryPlayer = nextPlayer;
+            //切り替えフラグをfalseに設定
+            entryPlayer.ChangeFlagTurn();
+            //次のキャラを追加
+            mediator.AddCharacter(entryPlayer);
         }
 
-        /// <summary>
-        /// 現在のプレイヤーを返す
-        /// </summary>
-        /// <returns></returns>
-        public Character GetPlayer()
+        public void AcceptInput()
         {
-            return playerList[pNum];
+            if (Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadRight) ||
+                Input.GetKeyTrigger(Keys.D))
+            {
+                Change(PlayerName.Momotaro);
+            }
+            else if (Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadUp) ||
+                Input.GetKeyTrigger(Keys.W))
+            {
+                Change(PlayerName.Inu);
+            }
+            else if (Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadLeft) ||
+                Input.GetKeyTrigger(Keys.A))
+            {
+                Change(PlayerName.Kiji);
+            }
+            else if (Input.GetKeyTrigger(PlayerIndex.One, Buttons.DPadDown) ||
+                Input.GetKeyTrigger(Keys.S))
+            {
+                Change(PlayerName.Saru);
+            }
         }
 
         /// <summary>
@@ -133,7 +160,12 @@ namespace Momotaro.Actor.Characters.Player
         /// <returns></returns>
         public bool IsClear()
         {
-            return playerList[pNum].IsClear();
+            return entryPlayer.IsClear();
+        }
+
+        public void Update(GameTime gameTime)
+        {
+            Add((PlayerName)GameData.pCount, addPlayers[GameData.pCount]);
         }
     }
 }

@@ -87,10 +87,6 @@ namespace Momotaro.Actor.Characters.BossObj
             this.position = position;
         }
 
-        public override void Change()
-        {
-        }    
-
         public override void HitChara(Character character)
         {
             //プレイアブルキャラクターに衝突すると消滅

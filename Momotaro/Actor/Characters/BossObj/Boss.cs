@@ -124,11 +124,6 @@ namespace Momotaro.Actor.Characters.BossObj
             motionAssetWord = motionName.ToString();
         }
 
-        public override void Change()
-        {
-
-        }
-
         /// <summary>
         /// キャラクターオブジェクトとの衝突判定
         /// </summary>

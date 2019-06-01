@@ -162,7 +162,6 @@ namespace Momotaro.Actor.Characters
         public abstract void Update(GameTime gameTime); //更新
         public abstract void HitChara(Character character); //キャラクターとのヒット通知
         public abstract void HitObj(GameObject obj);//オブジェクトとのヒット通知
-        public abstract void Change(); //切り替え
 
         //仮想メソッド
         /// <summary>

@@ -61,10 +61,5 @@ namespace Momotaro.Actor.Characters
         {
             
         }
-
-        public override void Change()
-        {
-
-        }
     }
 }

@@ -19,11 +19,6 @@ namespace Momotaro.Actor.Characters
             this.velocity = velocity;
         }
 
-        public override void Change()
-        {
-            
-        }
-
         public override void HitChara(Character character)
         {
             if(character is Human || character is Dog || character is Monkey || character is Bird)

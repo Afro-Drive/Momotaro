@@ -74,11 +74,6 @@ namespace Momotaro.Actor.Characters
 
         }
 
-        public override void Change()
-        {
-            
-        }
-
         public override void HitChara(Character character)
         {
             if(character is Attack)

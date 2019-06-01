@@ -69,7 +69,7 @@ namespace Momotaro
             sceneManager.Add(Scene.Scene.Title, new Title());
             sceneManager.Add(Scene.Scene.Logo, new Logo());
             sceneManager.Add(Scene.Scene.SelectScene, new SelectScene());
-            sceneManager.Add(Scene.Scene.GamePlay, new GamePlay(score,timer));
+            sceneManager.Add(Scene.Scene.GamePlay, new GamePlay(score, timer));
             sceneManager.Add(Scene.Scene.Pause, new Pause());
             sceneManager.Add(Scene.Scene.Ending, new Ending(timer));
             sceneManager.Add(Scene.Scene.GameOver, new GameOver(score,timer));

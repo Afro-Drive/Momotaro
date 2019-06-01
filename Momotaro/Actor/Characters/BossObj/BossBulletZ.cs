@@ -40,11 +40,6 @@ namespace Momotaro.Actor.Characters.BossObj
             color = Color.Red;
         }
 
-        public override void Change()
-        {
-
-        }
-
         public override void HitChara(Character character)
         {
             //プレイアブルキャラクターに衝突したら消滅

@@ -80,7 +80,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
             //Active状態だったらpCountを４にする(Birdに切り替えられるようになる)
             if (isActive)
             {
-                GameData.pCount = 3;
+                GameData.pCount = 2;
                 isActive = false;
             }
         }

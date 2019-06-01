@@ -185,15 +185,12 @@ namespace Momotaro.Actor.Characters.Player
             }
 
             Action();
+            ActionUpdate(gameTime);
             ChangeDir();
 
             //【追加】
             UpdateMyDirection();
             currentMotion.Update(gameTime);
-            if (Input.GetKeyTrigger(Keys.Z) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.Y))
-                //攻撃ボタンが入力されたらモーションを行う時間を確保
-                actionTimer.Initialize();
-            actionTimer.Update(gameTime);　//攻撃モーション用タイマーを起動
 
             Invincible(gameTime);
             DamageShow(gameTime);
@@ -230,7 +227,7 @@ namespace Momotaro.Actor.Characters.Player
             gameDevice.SetDisplayModify(new Vector2(setModifyX, setModifyY));
         }
 
-        public override void Change()
+        public void Change()
         {
             isChangeFlag = true;
             invincible = false;
@@ -364,6 +361,14 @@ namespace Momotaro.Actor.Characters.Player
             }
         }
 
+        private void ActionUpdate(GameTime gameTime)
+        {
+            if (Input.GetKeyTrigger(Keys.Z) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.Y))
+                actionTimer.Initialize();
+
+            actionTimer.Update(gameTime);　//攻撃モーション用タイマーを起動
+        }
+
         public void ChangeDir()
         {
             if ( //!isJump && 
@@ -461,7 +466,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 //描画状態を変える
                 currentMotion = motionDict[MotionName.attack];
-                    DrawAction(renderer, currentMotion);
+                DrawAction(renderer, currentMotion);
             }
             //非攻撃状態
             else

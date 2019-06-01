@@ -299,7 +299,7 @@ namespace Momotaro.Actor.Characters.Player
             gameDevice.SetDisplayModify(new Vector2(setModifyX, setModifyY));
         }
 
-        public override void Change()
+        public void Change()
         {
             isChangeFlag = true;
             invincible = false;

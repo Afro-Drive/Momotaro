@@ -86,7 +86,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
             //Active状態だったらpCountを２にする(Dogに切り替えられるようになる)
             if (isActive)
             {
-                GameData.pCount = 2;
+                GameData.pCount = 1;
                 isActive = false;
             }
         }
