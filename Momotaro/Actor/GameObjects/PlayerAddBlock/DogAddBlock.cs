@@ -36,7 +36,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
         }
 
         public DogAddBlock(DogAddBlock other)
-            : this(other.position, other.gameDevice) { }
+            : this(other.Position, other.gameDevice) { }
 
         public override void Change()
         {
@@ -63,7 +63,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
             if (!isDeadFlag)
                 renderer.DrawTexture(
                     "inu_idlingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     currentMotion.DrawingRange(),
                     Color.White);
         }

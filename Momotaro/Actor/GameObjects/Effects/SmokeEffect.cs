@@ -18,7 +18,7 @@ namespace Momotaro.Actor.GameObjects.Effects
         public SmokeEffect(Vector2 position, GameDevice gameDevice)
             : base("smoke_effect", position, 64, 64, gameDevice)
         {
-            this.position = position;
+            this.Position = position;
 
             motion = new Motion();
             for(int i=0; i<3; i++)
@@ -61,7 +61,7 @@ namespace Momotaro.Actor.GameObjects.Effects
 
         public override void Draw(Renderer renderer)
         {
-            renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), motion.DrawingRange(), Color.White);
+            renderer.DrawTexture(name, Position + gameDevice.GetDisplayModify(), motion.DrawingRange(), Color.White);
         }
     }
 }

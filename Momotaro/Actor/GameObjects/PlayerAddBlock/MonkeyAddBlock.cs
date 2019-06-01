@@ -35,7 +35,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
         }
 
         public MonkeyAddBlock(MonkeyAddBlock other)
-            : this(other.position, other.gameDevice) { }
+            : this(other.Position, other.gameDevice) { }
 
         public override void Change()
         {
@@ -52,7 +52,7 @@ namespace Momotaro.Actor.GameObjects.PlayerAddObj
             if (!isDeadFlag)
                 renderer.DrawTexture(
                     "saru_idlingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     currentMotion.DrawingRange(),
                     Color.White);
         }

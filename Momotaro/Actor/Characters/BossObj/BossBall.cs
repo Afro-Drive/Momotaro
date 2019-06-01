@@ -91,11 +91,11 @@ namespace Momotaro.Actor.Characters.BossObj
             if (!time.IsTime())　//まだ時間が残っている
             {
                 //ラスボス「鬼」の現在位置を特定し、それを自分の座標にする
-                position = mediator.GetBoss().GetPosition();
+                Position = mediator.GetBoss().Position;
                 //ターゲットの現在位置を取得
-                playerPos = mediator.GetPlayer().GetPosition();
+                playerPos = mediator.GetPlayer().Position;
                 //自分とターゲットとの座標の差を計算
-                playerV = playerPos - position;
+                playerV = playerPos - Position;
 
                 var velocity = Vector2.Zero;
                 num += 3;　//角度を増やしていく
@@ -103,12 +103,12 @@ namespace Momotaro.Actor.Characters.BossObj
                 //角度に応じた移動量を算出(三角関数を用いる)
                 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                 velocity.Normalize();　//角度で指定された移動方向のみを取得
-                position += velocity * 100;　//その方向に向かって一気に進む(角度が動的に変わるため軌道も変化していく)
+                Position += velocity * 100;　//その方向に向かって一気に進む(角度が動的に変わるため軌道も変化していく)
             }
             else　//時間切れになった
             {
                 playerV.Normalize();　//ターゲットへの方向のみ取得
-                position += playerV * 8;　//ターゲットに向かって進む
+                Position += playerV * 8;　//ターゲットに向かって進む
 
                 var velocity = Vector2.Zero;
                 num += 5;　//角度を変えていく
@@ -116,7 +116,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 //角度に応じた移動量を算出（三角関数を用いる）
                 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                 velocity.Normalize();　//角度で指定された移動方向のみ取得
-                position += velocity * 6;　//角度に応じて進む
+                Position += velocity * 6;　//角度に応じて進む
             }
         }
     }

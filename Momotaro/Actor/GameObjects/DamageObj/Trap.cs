@@ -41,7 +41,7 @@ namespace Momotaro.Actor.GameObjects.DamageObj
         /// </summary>
         /// <param name="other"></param>
         public Trap(Trap other)
-            :this (other.position, other.gameDevice, other.mediator)
+            :this (other.Position, other.gameDevice, other.mediator)
         {
 
         }
@@ -86,7 +86,7 @@ namespace Momotaro.Actor.GameObjects.DamageObj
             if(timer.IsTime())
             {
                 
-                mediator.AddGameObject(new Flame(position + new Vector2(0, -128), gameDevice, 1.0f));
+                mediator.AddGameObject(new Flame(Position + new Vector2(0, -128), gameDevice, 1.0f));
                 
                 timer.Initialize();
             }

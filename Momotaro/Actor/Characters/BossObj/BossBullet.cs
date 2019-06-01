@@ -84,7 +84,7 @@ namespace Momotaro.Actor.Characters.BossObj
             time = new CountDownTimer(2f);
 
             this.angle = angle;
-            this.position = position;
+            this.Position = position;
         }
 
         public override void HitChara(Character character)
@@ -124,21 +124,21 @@ namespace Momotaro.Actor.Characters.BossObj
             if(dir ==0)
             {
                 velocity.Normalize();
-                position += velocity * 10;
+                Position += velocity * 10;
             }
             else  if(dir ==1 )
             {
                 velocity.X = Fdir;
                 velocity.Y -= 0.5f; 
                 velocity.Y = (velocity.Y < -16.0f) ? (-16) : (velocity.Y);
-                position += velocity * 3;
+                Position += velocity * 3;
             }
             else if(dir == 2 )
             { 
                 velocity.X = Fdir;
                 velocity.Y -= 0.5f;　//徐々に下方向への移動量を加速
                 velocity.Y = (velocity.Y < -16.0f) ? (-16) : (velocity.Y);
-                position += velocity * 3;
+                Position += velocity * 3;
             }
             else if (dir == 3)
             {
@@ -146,7 +146,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 float angle = MathHelper.ToRadians(num);
                 velocity = new Vector2((float)Math.Cos(angle), (float)Math.Sin(angle));
                 velocity.Normalize();
-                position += velocity * 10;
+                Position += velocity * 10;
             }
         }
 

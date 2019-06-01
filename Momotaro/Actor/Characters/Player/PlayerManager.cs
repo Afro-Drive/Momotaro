@@ -72,7 +72,7 @@ namespace Momotaro.Actor.Characters.Player
         /// <param name="position"></param>
         public void SetStartPlayer(Vector2 position)
         {
-            entryPlayer.SetPosition(position);
+            entryPlayer.Position = position;
             mediator.AddCharacter(entryPlayer);
         }
 
@@ -104,13 +104,13 @@ namespace Momotaro.Actor.Characters.Player
 
             Character nextPlayer = (Character)playerDict[next];
             //現在動いているキャラから位置を取得
-            Vector2 position = entryPlayer.GetPosition();
+            Vector2 position = entryPlayer.Position;
 
             //当たり判定の違いによって位置がずれて埋まってしまうのを修正(1)
             //キャラクターの右下の位置を取得する
             position = new Vector2(
                 position.X,
-                position.Y + entryPlayer.GetHitH() + entryPlayer.GetHeigthMargin());
+                position.Y + entryPlayer.HitH+ entryPlayer.HeightMargin);
 
             ((IPlayable)entryPlayer).Change();
 
@@ -118,10 +118,10 @@ namespace Momotaro.Actor.Characters.Player
             //変更元のキャラの右下の位置をもとにポジションを取得
             position = new Vector2(
                 position.X,
-                position.Y - nextPlayer.GetHitH() - nextPlayer.GetHeigthMargin());
+                position.Y - nextPlayer.HitH- nextPlayer.HeightMargin);
 
             //取得した位置を設定
-            nextPlayer.SetPosition(position);
+            nextPlayer.Position = position;
             //操作キャラを上書き
             entryPlayer = nextPlayer;
             //切り替えフラグをfalseに設定

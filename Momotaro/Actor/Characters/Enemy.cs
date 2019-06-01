@@ -21,7 +21,7 @@ namespace Momotaro.Actor.Characters
 
         private IGameObjectMediator mediator;
 
-        private State state;
+        private CharaState state;
         private Direction direction;
 
         private Timer damageTimer;
@@ -32,7 +32,7 @@ namespace Momotaro.Actor.Characters
         public Enemy(string name, Vector2 position,AIName aiName, GameDevice gameDevice, IGameObjectMediator mediator)
             : base(name, position, 64, 64, 55, 60, gameDevice)
         {
-            this.position = position;
+            this.Position = position;
             this.aiName = aiName;
             this.mediator = mediator;
             map = mediator.GetMap();
@@ -41,7 +41,7 @@ namespace Momotaro.Actor.Characters
             gravity = 0.5f;
             damageVelocityY = -5;
 
-            state = State.Normal;
+            state = CharaState.Normal;
 
             SetAI();
 
@@ -87,7 +87,7 @@ namespace Momotaro.Actor.Characters
                     direction = Direction.Left;
                 }
 
-                state = State.Damage;
+                state = CharaState.Damage;
                 //isDeadFlag = true;
             }
         }
@@ -104,20 +104,20 @@ namespace Momotaro.Actor.Characters
         {
             switch(state)
             {
-                case State.Normal:
+                case CharaState.Normal:
                     ai.Attack();
-                    position = ai.Move();
+                    Position = ai.Move();
                     break;
-                case State.Damage:
+                case CharaState.Damage:
                     DamageUpdate(gameTime);
                     break;
-                case State.Delete:
+                case CharaState.Delete:
                     isDeadFlag = true;
-                    mediator.AddGameObject(new SmokeEffect(position, gameDevice));
+                    mediator.AddGameObject(new SmokeEffect(Position, gameDevice));
                     break;
             }
             //ai.Attack();
-            //position = ai.Move();
+            //Position = ai.Move();
 
             //【追加】
             velocity = ai.Velocity();
@@ -147,14 +147,14 @@ namespace Momotaro.Actor.Characters
         {
             switch (state)
             {
-                case State.Normal:
+                case CharaState.Normal:
                     //base.Draw(renderer);
                     DrawAnimation(renderer); //【変更】
                     break;
-                case State.Damage:
-                    renderer.DrawTexture("kooni_damage", position + gameDevice.GetDisplayModify());
+                case CharaState.Damage:
+                    renderer.DrawTexture("kooni_damage", Position + gameDevice.GetDisplayModify());
                     break;
-                case State.Delete:
+                case CharaState.Delete:
                     break;
             }
         }
@@ -210,7 +210,7 @@ namespace Momotaro.Actor.Characters
             {
                 renderer.DrawTexture(
                     "Oni_Attack",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     currentMotion.DrawingRange(),
                     color);
             }
@@ -219,7 +219,7 @@ namespace Momotaro.Actor.Characters
                 //左向きの画像を反転させて描画する
                 renderer.DrawAntiAxisTexture(
                     "Oni_Attack",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     currentMotion.DrawingRange(),
                     Vector2.Zero,
                     1f,
@@ -235,11 +235,11 @@ namespace Momotaro.Actor.Characters
 
             if(direction == Direction.Right)
             {
-                position += new Vector2(10, damageVelocityY);
+                Position += new Vector2(10, damageVelocityY);
             }
             else if (direction == Direction.Left)
             {
-                position += new Vector2(-10, damageVelocityY);
+                Position += new Vector2(-10, damageVelocityY);
             }
 
             damageVelocityY += gravity;
@@ -247,7 +247,7 @@ namespace Momotaro.Actor.Characters
             if (damageTimer.IsTime())
             {
                 damageTimer.Initialize();
-                state = State.Delete;
+                state = CharaState.Delete;
                 damageVelocityY = -5;
             }
         }
@@ -260,10 +260,10 @@ namespace Momotaro.Actor.Characters
             Character target = mediator.GetPlayer();
             if (target == null) return;
 
-            float targetPosX = target.GetPosition().X;
+            float targetPosX = target.Position.X;
 
             myDirectionX = Direction.Right;
-            if (targetPosX < this.position.X)
+            if (targetPosX < this.Position.X)
                 myDirectionX = Direction.Left;
         }
     }

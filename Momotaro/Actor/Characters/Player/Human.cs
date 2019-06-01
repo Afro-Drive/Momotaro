@@ -158,7 +158,7 @@ namespace Momotaro.Actor.Characters.Player
         public void GodMove()
         {
             velocity = Input.Velocity() * 10;
-            position += velocity;
+            Position += velocity;
         }
 
         public override void Update(GameTime gameTime)
@@ -205,23 +205,23 @@ namespace Momotaro.Actor.Characters.Player
         /// </summary>
         private void SetDisplayModify()
         {
-            float setModifyX = -position.X + (Screen.Width / 2 - width / 2);
-            float setModifyY = -position.Y + (Screen.Height / 2);
+            float setModifyX = -Position.X + (Screen.WIDTH / 2 - Width / 2);
+            float setModifyY = -Position.Y + (Screen.HEIGHT / 2);
 
             //x方向の画面端の処理
-            if (position.X < Screen.Width / 2 - width / 2 + 64)//+64を外すと一番左のブロックも見えます
+            if (Position.X < Screen.WIDTH / 2 - Width / 2 + BlockSize.WIDTH)//+BlockSize.WIDTHを外すと一番左のブロックも見えます
             {
-                setModifyX = -64;//-64を0にすると一番左のブロックも見えます
+                setModifyX = -BlockSize.WIDTH;//-BlockSize.WIDTHを0にすると一番左のブロックも見えます
             }
-            else if (position.X > mediator.MapSize().X - Screen.Width / 2 - width / 2 - 64)//-64を外すと一番右のブロックも見えます
+            else if (Position.X > mediator.MapSize().X - Screen.WIDTH / 2 - Width / 2 - BlockSize.WIDTH)//-BlockSize.WIDTHを外すと一番右のブロックも見えます
             {
-                setModifyX = -(mediator.MapSize().X - Screen.Width / 2 - width / 2) + (Screen.Width / 2 - width / 2 + 64);//+64を外すと一番右のブロックも見えます
+                setModifyX = -(mediator.MapSize().X - Screen.WIDTH / 2 - Width / 2) + (Screen.WIDTH / 2 - Width / 2 + BlockSize.WIDTH);//+BlockSize.WIDTHを外すと一番右のブロックも見えます
             }
 
             //y方向　マップの一番下のブロック以下が見えないようにする
-            if (position.Y > mediator.MapSize().Y - Screen.Height / 2 - 64)// -64を外すと一番下のブロックも見えます。
+            if (Position.Y > mediator.MapSize().Y - Screen.HEIGHT / 2 - BlockSize.HEIGHT)// -BlockSize.HEIGHTを外すと一番下のブロックも見えます。
             {
-                setModifyY = -(mediator.MapSize().Y - Screen.Height - 64);// -64を外すと一番下のブロックも見えます。
+                setModifyY = -(mediator.MapSize().Y - Screen.HEIGHT - BlockSize.HEIGHT);// -BlockSize.HEIGHTを外すと一番下のブロックも見えます。
             }
 
             gameDevice.SetDisplayModify(new Vector2(setModifyX, setModifyY));
@@ -249,13 +249,14 @@ namespace Momotaro.Actor.Characters.Player
             {
                 checkPos = checkLList;
             }
+            Vector2 hPos = Position;
 
             float normalVX = Math.Sign(velocity.X);
             for (int x = 0; x < Math.Abs(velocity.X); x++)
             {
                 foreach (var pos in checkPos)
                 {
-                    if (map.IsBlock(position + pos))
+                    if (map.IsBlock(Position + pos))
                     {
                         if (0 < velocity.X)
                         {
@@ -267,7 +268,8 @@ namespace Momotaro.Actor.Characters.Player
                         return;
                     }
                 }
-                position.X += normalVX;
+                hPos.X += normalVX;
+                Position = hPos;
             }
         }
 
@@ -278,13 +280,14 @@ namespace Momotaro.Actor.Characters.Player
             {
                 checkPos = checkDList;
             }
+            Vector2 hPos = Position;
 
             float normalVY = Math.Sign(velocity.Y);
             for (int y = 0; y < Math.Abs(velocity.Y); y++)
             {
                 foreach (var pos in checkPos)
                 {
-                    if (map.IsBlock(position + pos))
+                    if (map.IsBlock(Position + pos))
                     {
                         if (velocity.Y > 0)
                         {
@@ -297,7 +300,8 @@ namespace Momotaro.Actor.Characters.Player
                         return;
                     }
                 }
-                position.Y += normalVY;
+                hPos.Y += normalVY;
+                Position = hPos;
             }
         }
 
@@ -336,7 +340,7 @@ namespace Momotaro.Actor.Characters.Player
             foreach (var pos in checkDList)
             {
                 // 下にブロックがあったら
-                if (map.IsBlock(position + pos))
+                if (map.IsBlock(Position + pos))
                 {
                     // 処理終了
                     return;
@@ -357,7 +361,7 @@ namespace Momotaro.Actor.Characters.Player
             if (Input.GetKeyTrigger(Keys.Z) || Input.GetKeyTrigger(PlayerIndex.One, Buttons.Y))
             {
                 sound.PlaySE("momo_atk");
-                mediator.AddCharacter(new Attack(position, dir, gameDevice, this));
+                mediator.AddCharacter(new Attack(Position, dir, gameDevice, this));
             }
         }
 
@@ -387,7 +391,7 @@ namespace Momotaro.Actor.Characters.Player
 
         public Vector2 SetPlayerPosition(ref Vector2 OtherPosition)
         {
-            OtherPosition = position;
+            OtherPosition = Position;
             return OtherPosition;
         }
 
@@ -507,7 +511,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 renderer.DrawTexture(
                     "momotaro_attackR",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     attackMotion.DrawingRange(),
                     color);
             }
@@ -516,7 +520,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 renderer.DrawTexture(
                     "momotaro_attackL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     attackMotion.DrawingRange(),
                     color);
             }

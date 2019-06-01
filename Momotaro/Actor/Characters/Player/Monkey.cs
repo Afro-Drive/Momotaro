@@ -48,7 +48,7 @@ namespace Momotaro.Actor.Characters.Player
             isRightWallGrip = false;
             isLeftWallGrip = false;
 
-            currentPositionX = position.X;
+            currentPositionX = Position.X;
 
             sound = GameDevice.Instance().GetSound();
             soundTimer = new CountDownTimer(0.5f);
@@ -224,7 +224,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 renderer.DrawTexture(
                     "saru_climbingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     wallGripMotion.DrawingRange(),
                     color);
             }
@@ -233,7 +233,7 @@ namespace Momotaro.Actor.Characters.Player
                 //左用の画像を反転させて描画
                 renderer.DrawAntiAxisTexture(
                     "saru_climbingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     wallGripMotion.DrawingRange(),
                     Vector2.Zero,
                     1f,
@@ -254,7 +254,7 @@ namespace Momotaro.Actor.Characters.Player
                 //左側に登攀時の画像を反転させて描画
                 renderer.DrawAntiAxisTexture(
                     "saru_idlingclimbingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     wallGripMotion.DrawingRange(),
                    Vector2.Zero,
                    1f,
@@ -265,7 +265,7 @@ namespace Momotaro.Actor.Characters.Player
             {
                 renderer.DrawTexture(
                     "saru_idlingclimbingL",
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     wallGripMotion.DrawingRange(),
                     color
                     );
@@ -277,23 +277,23 @@ namespace Momotaro.Actor.Characters.Player
         /// </summary>
         private void SetDisplayModify()
         {
-            float setModifyX = -position.X + (Screen.Width / 2 - width / 2);
-            float setModifyY = -position.Y + (Screen.Height / 2);
+            float setModifyX = -Position.X + (Screen.WIDTH / 2 - Width / 2);
+            float setModifyY = -Position.Y + (Screen.HEIGHT / 2);
 
             //x方向の画面端の処理
-            if (position.X < Screen.Width / 2 - width / 2 + 64)//+64を外すと一番左のブロックも見えます
+            if (Position.X < Screen.WIDTH / 2 - Width / 2 + BlockSize.WIDTH)//+BlockSize.WIDTHを外すと一番左のブロックも見えます
             {
-                setModifyX = -64;//-64を0にすると一番左のブロックも見えます
+                setModifyX = -BlockSize.WIDTH;//-BlockSize.WIDTHを0にすると一番左のブロックも見えます
             }
-            else if (position.X > mediator.MapSize().X - Screen.Width / 2 - width / 2 - 64)//-64を外すと一番右のブロックも見えます
+            else if (Position.X > mediator.MapSize().X - Screen.WIDTH / 2 - Width / 2 - BlockSize.WIDTH)//-BlockSize.WIDTHを外すと一番右のブロックも見えます
             {
-                setModifyX = -(mediator.MapSize().X - Screen.Width / 2 - width / 2) + (Screen.Width / 2 - width / 2 + 64);//+64を外すと一番右のブロックも見えます
+                setModifyX = -(mediator.MapSize().X - Screen.WIDTH / 2 - Width / 2) + (Screen.WIDTH / 2 - Width / 2 + BlockSize.WIDTH);//+BlockSize.WIDTHを外すと一番右のブロックも見えます
             }
 
             //y方向　マップの一番下のブロック以下が見えないようにする
-            if (position.Y > mediator.MapSize().Y - Screen.Height / 2 - 64)// -64を外すと一番下のブロックも見えます。
+            if (Position.Y > mediator.MapSize().Y - Screen.HEIGHT / 2 - BlockSize.HEIGHT)// -BlockSize.HEIGHTを外すと一番下のブロックも見えます。
             {
-                setModifyY = -(mediator.MapSize().Y - Screen.Height - 64);// -64を外すと一番下のブロックも見えます。
+                setModifyY = -(mediator.MapSize().Y - Screen.HEIGHT - BlockSize.HEIGHT);// -BlockSize.HEIGHTを外すと一番下のブロックも見えます。
             }
 
             gameDevice.SetDisplayModify(new Vector2(setModifyX, setModifyY));
@@ -321,13 +321,14 @@ namespace Momotaro.Actor.Characters.Player
             {
                 checkPos = checkLList;
             }
+            Vector2 mPos = Position;
 
             float normalVX = Math.Sign(velocity.X);
             for (int x = 0; x < Math.Abs(velocity.X); x++)
             {
                 foreach (var pos in checkPos)
                 {
-                    if (map.IsBlock(position + pos))
+                    if (map.IsBlock(Position + pos))
                     {
                         if (0 < velocity.X)
                         {
@@ -341,7 +342,8 @@ namespace Momotaro.Actor.Characters.Player
                         return;
                     }
                 }
-                position.X += normalVX;
+                mPos.X += normalVX;
+                Position = mPos;
             }
         }
 
@@ -352,13 +354,14 @@ namespace Momotaro.Actor.Characters.Player
             {
                 checkPos = checkDList;
             }
+            Vector2 mPos = Position;
 
             float normalVY = Math.Sign(velocity.Y);
             for (int y = 0; y < Math.Abs(velocity.Y); y++)
             {
                 foreach (var pos in checkPos)
                 {
-                    if (map.IsBlock(position + pos))
+                    if (map.IsBlock(Position + pos))
                     {
                         if (velocity.Y > 0)
                         {
@@ -371,7 +374,8 @@ namespace Momotaro.Actor.Characters.Player
                         return;
                     }
                 }
-                position.Y += normalVY;
+                mPos.Y += normalVY;
+                Position = mPos;
             }
         }
 
@@ -412,7 +416,7 @@ namespace Momotaro.Actor.Characters.Player
             foreach (var pos in checkDList)
             {
                 // 下にブロックがあったら
-                if (map.IsBlock(position + pos))
+                if (map.IsBlock(Position + pos))
                 {
                     // 処理終了
                     return;
@@ -440,7 +444,7 @@ namespace Momotaro.Actor.Characters.Player
         private void WallGripUpdate()
         {
             previousPositionX = currentPositionX;
-            currentPositionX = position.X;
+            currentPositionX = Position.X;
 
             if (isRightWallGrip)
             {
@@ -525,7 +529,7 @@ namespace Momotaro.Actor.Characters.Player
                 damageShow.Update(gameTime);
                 velocity.X = 10f;
                 velocity.Y = -3f;
-                //position += velocity;
+                //Position += velocity;
                 MoveX();
                 MoveY();
 
@@ -536,7 +540,7 @@ namespace Momotaro.Actor.Characters.Player
                 damageShow.Update(gameTime);
                 velocity.X = -10f;
                 velocity.Y = -3f;
-                //position += velocity;
+                //Position += velocity;
                 MoveX();
                 MoveY();
 

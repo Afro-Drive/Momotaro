@@ -23,7 +23,6 @@ namespace Momotaro.Actor
     {
         private List<List<GameObject>> mapList; //ListのListで縦横の２次元配列を表現
         private GameDevice gameDevice; //ゲームデバイス
-
         private IGameObjectMediator mediator;
 
         //【追加】ブロックの番号
@@ -122,8 +121,8 @@ namespace Momotaro.Actor
                 {
                     //ディクショナリから元データを取り出し、クローン機能で複製
                     GameObject work = (GameObject)objectDict[s].Clone();
-                    work.SetPosition(new Vector2(colCnt * work.GetHeight(),
-                        lineCnt * work.GetWidth()));
+                    work.Position = new Vector2(colCnt * work.Height,
+                        lineCnt * work.Width);
                     //if(work is Button)
                     //{
                     //    ((Button)(work)).SetLinkedGameObjectID(GameObjectID.Door);
@@ -256,7 +255,7 @@ namespace Momotaro.Actor
         {
             foreach (var chara in mediator.GetCharacterList())
             {
-                Vector2 pos = chara.GetPosition();
+                Vector2 pos = chara.Position;
                 pos = new Vector2((int)pos.X / 64, (int)pos.Y / 64);
 
                 int y = (int)pos.Y;
@@ -307,14 +306,14 @@ namespace Momotaro.Actor
         public int GetWidth()
         {
             int col = mapList[0].Count;
-            int width = col * mapList[0][0].GetWidth();
+            int width = col * mapList[0][0].Width;
             return width;
         }
 
         public int GetHeight()
         {
             int row = mapList.Count;
-            int height = row * mapList[0][0].GetHeight();
+            int height = row * mapList[0][0].Height;
             return height;
         }
     }

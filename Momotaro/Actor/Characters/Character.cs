@@ -14,16 +14,9 @@ namespace Momotaro.Actor.Characters
     /// <summary>
     /// 近藤　追加
     /// </summary>
-    abstract class Character
+    abstract partial class Character
     {
         protected string name; //アセット名
-        protected Vector2 position; //位置
-        protected int width; //幅
-        protected int height; //高さ
-        protected int hitW;//当たり判定の幅
-        protected int hitH;//当たり判定の高さ
-        protected int widthMargin;//幅の余白
-        protected int heightMargin;//高さの余白
         protected bool isDeadFlag = false; //死亡フラグ
         protected GameDevice gameDevice; //ゲームデバイス
         protected bool isChangeFlag = false;
@@ -32,6 +25,15 @@ namespace Momotaro.Actor.Characters
         protected Timer invincibleTime;
         protected Color color;
         protected float alpha;
+
+        //座標・当たり判定関連のプロパティ
+        public Vector2 Position { get; set; }//座標
+        public int Width { get; }//全幅
+        public int Height { get; }//全長
+        public int HitW { get; }//実際の当たり判定幅
+        public int HitH { get; }//実際の当たり判定高さ
+        public int WidthMargin { get; }//全幅と判定幅の空白
+        public int HeightMargin { get; }//全高さと判定高さの空白
 
         protected Map map;
         protected List<Vector2> checkRList;
@@ -48,13 +50,6 @@ namespace Momotaro.Actor.Characters
         protected Vector2 velocity; //移動量(自分の向いている方向の更新に使用)
         protected bool isJump; //ジャンプ中か？
 
-        protected enum State
-        {
-            Normal,
-            Damage,
-            Delete,
-        }
-
 
         /// <summary>
         /// コンストラクタ
@@ -68,30 +63,30 @@ namespace Momotaro.Actor.Characters
             int width, int height, int hitW, int hitH, GameDevice gameDevice)
         {
             this.name = name;
-            this.position = position;
-            this.width = width;
-            this.height = height;
-            this.hitW = hitW;
-            this.hitH = hitH;
+            this.Position = position;
+            this.Width = width;
+            this.Height = height;
+            this.HitW = hitW;
+            this.HitH = hitH;
             color = Color.White;
             alpha = 1f;
             // あたり判定の余白（左右の空き部分）
-            widthMargin = (width - hitW) / 2;
-            heightMargin = (height - hitH) / 2;
+            WidthMargin = (Width - HitW) / 2;
+            HeightMargin = (Height - HitH) / 2;
 
             // リストの生成
             checkRList = new List<Vector2>()
-                { new Vector2(width - widthMargin, heightMargin),
-                new Vector2(width - widthMargin, height - heightMargin - 1) };
+                { new Vector2(Width - WidthMargin, HeightMargin),
+                new Vector2(Width - WidthMargin, Height - HeightMargin - 1) };
             checkLList = new List<Vector2>()
-                { new Vector2(widthMargin - 1, heightMargin),
-                new Vector2(widthMargin - 1, height - heightMargin - 1) };
+                { new Vector2(WidthMargin - 1, HeightMargin),
+                new Vector2(WidthMargin - 1, Height - HeightMargin - 1) };
             checkUList = new List<Vector2>()
-                { new Vector2(widthMargin, heightMargin - 1),
-                new Vector2(width - widthMargin - 1, heightMargin - 1) };
+                { new Vector2(WidthMargin, HeightMargin - 1),
+                new Vector2(Width - WidthMargin - 1, HeightMargin - 1) };
             checkDList = new List<Vector2>()
-                { new Vector2(widthMargin, height - heightMargin),
-                new Vector2(width - widthMargin - 1, height - heightMargin) };
+                { new Vector2(WidthMargin, Height - HeightMargin),
+                new Vector2(Width - WidthMargin - 1, Height - HeightMargin) };
 
             this.gameDevice = gameDevice;
 
@@ -103,61 +98,6 @@ namespace Momotaro.Actor.Characters
             isJump = true;
         }
 
-        /// <summary>
-        /// 位置の設定
-        /// </summary>
-        /// <param name="position">設定した位置</param>
-        public void SetPosition(Vector2 position)
-        {
-            this.position = position;
-        }
-
-        /// <summary>
-        /// 位置の取得
-        /// </summary>
-        /// <returns>ゲームオブジェクトの位置</returns>
-        public Vector2 GetPosition()
-        {
-            return position;
-        }
-
-        /// <summary>
-        /// オブジェクト幅の取得
-        /// </summary>
-        /// <returns></returns>
-        public int GetWidth()
-        {
-            return width;
-        }
-
-        /// <summary>
-        /// オブジェクトの高さの取得
-        /// </summary>
-        /// <returns></returns>
-        public int GetHeight()
-        {
-            return height;
-        }
-
-        public int GetHitW()
-        {
-            return hitW;
-        }
-
-        public int GetHitH()
-        {
-            return hitH;
-        }
-
-        public int GetWidhtMargin()
-        {
-            return widthMargin;
-        }
-
-        public int GetHeigthMargin()
-        {
-            return heightMargin;
-        }
 
         public abstract void Update(GameTime gameTime); //更新
         public abstract void HitChara(Character character); //キャラクターとのヒット通知
@@ -170,7 +110,7 @@ namespace Momotaro.Actor.Characters
         /// <param name="renderer">描画オブジェクト</param>
         public virtual void Draw(Renderer renderer)
         {
-            renderer.DrawTexture(name, position + gameDevice.GetDisplayModify(), color * alpha);
+            renderer.DrawTexture(name, Position + gameDevice.GetDisplayModify(), color * alpha);
         }
 
         /// <summary>
@@ -215,7 +155,7 @@ namespace Momotaro.Actor.Characters
             {
                 renderer.DrawTexture(
                     assetOfDirL,
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     moveMotion.DrawingRange(),
                     color);
             }
@@ -225,7 +165,7 @@ namespace Momotaro.Actor.Characters
                 //左向きの画像を反転させて描画する
                 renderer.DrawAntiAxisTexture(
                     assetOfDirL,
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     moveMotion.DrawingRange(),
                     new Vector2(0, 0),
                     1,
@@ -258,7 +198,7 @@ namespace Momotaro.Actor.Characters
             //向きに応じたアセットを描画する
             renderer.DrawTexture(
                 asset,
-                position + gameDevice.GetDisplayModify(),
+                Position + gameDevice.GetDisplayModify(),
                 moveMotion.DrawingRange(),
                 color);
 
@@ -284,7 +224,7 @@ namespace Momotaro.Actor.Characters
             //方向に合わせたアセットを描画する
             renderer.DrawTexture(
                 useAsset,
-                position + gameDevice.GetDisplayModify(),
+                Position + gameDevice.GetDisplayModify(),
                 jumpMotion.DrawingRange(), //ディクショナリから該当するモーションを取り出す
                 color);
         }
@@ -295,14 +235,14 @@ namespace Momotaro.Actor.Characters
         /// <param name="renderer"></param>
         /// <param name="assetOfDirL">左向きにジャンプ中に使用するアセット名</param>
         /// <param name="jumpMotion">ジャンプ中のモーション</param>
-        public void DrawJumping(Renderer renderer,string assetOfDirL, Motion jumpMotion)
+        public void DrawJumping(Renderer renderer, string assetOfDirL, Motion jumpMotion)
         {
             //左方向へジャンプ
             if (isJump && velocity.X <= 0)
             {
                 renderer.DrawTexture(
                     assetOfDirL,
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     jumpMotion.DrawingRange(),
                     color);
             }
@@ -312,7 +252,7 @@ namespace Momotaro.Actor.Characters
                 //左方向の画像を反転させて描画
                 renderer.DrawAntiAxisTexture(
                     assetOfDirL,
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     jumpMotion.DrawingRange(), //ディクショナリから該当するモーションを取り出す
                     Vector2.Zero,
                     1f,
@@ -341,10 +281,10 @@ namespace Momotaro.Actor.Characters
             //方向に合わせたアセットで描画
             renderer.DrawTexture(
                 useAsset,
-                position + gameDevice.GetDisplayModify(),
+                Position + gameDevice.GetDisplayModify(),
                 idlingMotion.DrawingRange(),
                 color);
-            
+
         }
 
         /// <summary>
@@ -359,9 +299,9 @@ namespace Momotaro.Actor.Characters
             if (myDirectionX == Direction.Left)
             {
                 renderer.DrawTexture(
-    　　　　        assetOfIdlingL,
-    　　　　        position + gameDevice.GetDisplayModify(),
-    　　　　        idlingMotion.DrawingRange(),
+            assetOfIdlingL,
+            Position + gameDevice.GetDisplayModify(),
+            idlingMotion.DrawingRange(),
                     color);
 
             }
@@ -371,13 +311,13 @@ namespace Momotaro.Actor.Characters
                 //左方向のアセットを反転させて描画
                 renderer.DrawAntiAxisTexture(
                     assetOfIdlingL,
-                    position + gameDevice.GetDisplayModify(),
+                    Position + gameDevice.GetDisplayModify(),
                     idlingMotion.DrawingRange(),
                     Vector2.Zero,
                     1f,
                     SpriteEffects.FlipHorizontally,
                     color);
-            }            
+            }
         }
         #endregion 【追加】アニメーション用の描画
 
@@ -401,10 +341,10 @@ namespace Momotaro.Actor.Characters
             Rectangle area = new Rectangle();
 
             //位置と幅、高さを設定
-            area.X = (int)position.X + widthMargin;
-            area.Y = (int)position.Y + heightMargin;
-            area.Height = hitH;
-            area.Width = hitW;
+            area.X = (int)Position.X + WidthMargin;
+            area.Y = (int)Position.Y + HeightMargin;
+            area.Height = HitH;
+            area.Width = HitW;
 
             return area;
         }
@@ -453,7 +393,6 @@ namespace Momotaro.Actor.Characters
             //プレイヤーがブロックに乗った
             return Direction.Top;
         }
-
 
         public bool IsChange()
         {

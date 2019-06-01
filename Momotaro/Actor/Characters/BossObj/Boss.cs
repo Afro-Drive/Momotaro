@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Momotaro.Actor.Characters.Player;
 using Momotaro.Actor.GameObjects;
+using Momotaro.Def;
 using Momotaro.Device;
 using Momotaro.Scene;
 using Momotaro.Util;
@@ -16,11 +17,10 @@ namespace Momotaro.Actor.Characters.BossObj
     /// ラスボス「鬼」クラス
     /// 作成者:任くん
     /// </summary>
-    class Boss : Character
+    partial class Boss : Character
     {
         //フィールド
         private IGameObjectMediator mediator;　//仲介者(自分とPlayerとの距離を計測する際に使用)
-        //private Vector2 velocity;
         private int hp = 400;　//体力
         private Timer time;　//タイマー
         private BossState currentState;　//ボスの戦闘状態
@@ -33,23 +33,9 @@ namespace Momotaro.Actor.Characters.BossObj
         private int vertigo;　//目まい用の整数型？
         private bool isVertigo;　//目まい状態かってこと？
         private float vertigoTime;　//目まいのタイマー
-        private float angle;　//気玉を放つ角度
 
         private string motionAssetWord = "idling"; //鬼の状態に合わせた文字列(描画モーション名の決定に使用)
         private Motion effectMotion; //追加
-
-        /// <summary>
-        /// ボスの戦闘態勢の列挙型
-        /// </summary>
-        private enum BossState
-        {
-            RunAway,　//プレイヤーターゲットからの逃走
-            SprintAttack, 　//気玉の急上昇放出
-            JumpAttack, 　//高速突進
-            ShotAttack,　//ターゲットに向けて気玉を1発放つ
-            CircleAttack,　//気玉の弾幕放出
-            Wait, 　//待機
-        }
 
         /// <summary>
         /// コンストラクタ
@@ -197,11 +183,6 @@ namespace Momotaro.Actor.Characters.BossObj
             {
                 cd = time.Now();　//floatの変数に現在時間を代入
             }
-            if (time.Now() - cd >= 0.5f)　//これはどういう意味があるの？
-            {
-
-
-            }
             //気玉を放出する（戦闘態勢が遷移する時は毎回放出する）
             // mediator.AddCharacter(new BossBall(position, gameDevice, 0, mediator));
             currentState = bossState;　//引数の態勢を現在の戦闘態勢にセット
@@ -217,12 +198,14 @@ namespace Momotaro.Actor.Characters.BossObj
         /// <param name="gameTime"></param>
         public override void Update(GameTime gameTime)
         {
-            //  Vector2.Clamp(position , Vector2.Zero, new Vector2(map.GetWidth(), map.GetHeight())) ;
-            Console.WriteLine(hp);　//HPを出力（体力確認用）
+            Vector2.Clamp(
+                Position, 
+                new Vector2(BlockSize.WIDTH * 5, BlockSize.HEIGHT * 5), 
+                new Vector2(map.GetWidth() - BlockSize.WIDTH * 5, map.GetHeight() - BlockSize.HEIGHT * 5));
+
             Invincible(gameTime);　//ダメージ状態を更新
             if (hp <= 0) isDeadFlag = true; //HPが0になったら死亡させる→TrueEndingへ・・・
             time.Update(gameTime);　//カウントアップタイマーを更新
-            angle = MathHelper.ToRadians(time.Now());　//タイマーの現在時間に合わせて角度を変えていく（凄い発想だ！）
 
             IsVertigo();　//めまいの更新？
             if (vertigo % 5 == 0)
@@ -243,49 +226,35 @@ namespace Momotaro.Actor.Characters.BossObj
             }
 
             //戦闘態勢に合わせた攻撃挙動をする
-            if (currentState == BossState.SprintAttack)
+            switch (currentState)
             {
-                SprintAttack(gameTime);
-            }
-            else if (currentState == BossState.Wait)
-            {
-                //待機状態のため、何もしない
+                case BossState.SprintAttack:
+                    SprintAttack(gameTime);
+                    break;
 
-                //描画モーションをアイドリングに
-                setMotionAndAsset(MotionName.idling);
-            }
-            else if (currentState == BossState.ShotAttack)
-            {
-                ShotAttack(gameTime);
-            }
-            else if (currentState == BossState.CircleAttack)
-            {
-                CircleAttack(gameTime);
-            }
-            else if (currentState == BossState.JumpAttack)
-            {
-                JumpAttack(gameTime);
-            }
-            else if (currentState == BossState.RunAway)
-            {
-                RunAway(gameTime);
-            }
-            //キー入力でボスの状態を変更（デバッグ用？）
-            if (Input.GetKeyTrigger(Microsoft.Xna.Framework.Input.Keys.J))
-            {
-                currentState += 1;
-                stateNum = 0;
-                attackNum = 0;
-            }
-            else if (Input.GetKeyTrigger(Microsoft.Xna.Framework.Input.Keys.K))
-            {
-                currentState -= 1;
-                stateNum = 0;
-                attackNum = 0;
-            }
+                case BossState.Wait:
+                    //待機状態のため、何もしない
 
-            //現在のボスの状態を出力（確認用）
-            Console.WriteLine(currentState);
+                    //描画モーションをアイドリングに
+                    setMotionAndAsset(MotionName.idling);
+                    break;
+
+                case BossState.ShotAttack:
+                    ShotAttack(gameTime);
+                    break;
+
+                case BossState.CircleAttack:
+                    CircleAttack(gameTime);
+                    break;
+
+                case BossState.JumpAttack:
+                    JumpAttack(gameTime);
+                    break;
+
+                case BossState.RunAway:
+                    RunAway(gameTime);
+                    break;
+            }
 
             //モーションを更新
             currentMotion.Update(gameTime);
@@ -337,16 +306,16 @@ namespace Momotaro.Actor.Characters.BossObj
                 CD.Update(gameTime);　//上記で生成したカウントダウンタイマーを起動
 
                 //自分とプレイヤーとのX座標の差を計算
-                float x = playerPos.X - position.X;
+                float x = playerPos.X - Position.X;
                 if (x < 0)　//プレイヤーの方が左側にいる
                 {
                     //自分は右側に移動する（逃走する）
-                    position += new Vector2(15, 0);
+                    Position += new Vector2(15, 0);
                 }
                 else　//自分の方が左側にいる
                 {
                     //自分は左側に移動する（逃走する）
-                    position += new Vector2(-15, 0);
+                    Position += new Vector2(-15, 0);
                 }
                 if (CD.IsTime())　//カウントダウンタイマーが時間切れ
                 {
@@ -403,10 +372,10 @@ namespace Momotaro.Actor.Characters.BossObj
 
                 //プレイヤーの位置情報を取得
                 playerPos =
-                      mediator.GetPlayer().GetPosition();
+                      mediator.GetPlayer().Position;
                 alpha = (1 - a);
                 //プレイヤーの座標が変わらなければ
-                if (playerPos == mediator.GetPlayer().GetPosition())
+                if (playerPos == mediator.GetPlayer().Position)
                 {
                     stateNum += 1;　//攻撃アルゴリズムを変更
                 }
@@ -416,7 +385,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 //描画モーションを突進にする
                 setMotionAndAsset(MotionName.attack);
 
-                velocity = (playerPos + new Vector2(0, -150)) - position;　//移動量を設定
+                velocity = (playerPos + new Vector2(0, -150)) - Position;　//移動量を設定
                 if (!invincible)　//ダメージ状態でなければ
                 {
                     //紫のオーラをまとわせる
@@ -424,7 +393,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 }
                 velocity.Normalize();　//移動の方向のみ取得
                 //特定の条件に一致いるか確認
-                if ((playerPos.Y - position.Y) < 165 && (playerPos.Y - position.Y) > 130)
+                if ((playerPos.Y - Position.Y) < 165 && (playerPos.Y - Position.Y) > 130)
                 {
                     //攻撃アルゴリズムを変更
                     CD.Update(gameTime);
@@ -439,31 +408,31 @@ namespace Momotaro.Actor.Characters.BossObj
                 else
                 {
                     //プレイヤーのいたおよその方向に向かって突進
-                    position += velocity * 20;
+                    Position += velocity * 20;
                 }
             }
             else if (stateNum == 2)　//突進＆仕上げの気玉同時放出
             {
                 //ターゲットのY座標を取得
-                playerPos.Y = mediator.GetPlayer().GetPosition().Y;
+                playerPos.Y = mediator.GetPlayer().Position.Y;
 
                 //自分とターゲットとの縦方向の距離が10より大きければ
-                if (Math.Abs(position.Y - playerPos.Y) > 10f)
+                if (Math.Abs(Position.Y - playerPos.Y) > 10f)
                 {
                     //ターゲットへの方向と距離を取得
-                    velocity = playerPos - position;
+                    velocity = playerPos - Position;
                     //方向のみを取得
                     velocity.Normalize();
                     //ターゲットに向かって突進
-                    position += velocity * 20;
+                    Position += velocity * 20;
                 }
                 else　//ある程度ターゲットに近づいた
                 {
                     //気玉を多方向に放出
-                    mediator.AddCharacter(new BossBullet(position, gameDevice, 1, 2));
-                    mediator.AddCharacter(new BossBullet(position, gameDevice, 1, 4));
-                    mediator.AddCharacter(new BossBullet(position, gameDevice, 1, -2));
-                    mediator.AddCharacter(new BossBullet(position, gameDevice, 1, -4));
+                    mediator.AddCharacter(new BossBullet(Position, gameDevice, 1, 2));
+                    mediator.AddCharacter(new BossBullet(Position, gameDevice, 1, 4));
+                    mediator.AddCharacter(new BossBullet(Position, gameDevice, 1, -2));
+                    mediator.AddCharacter(new BossBullet(Position, gameDevice, 1, -4));
 
                     //気玉を放つ戦闘態勢に変更
                     ChangeState(BossState.ShotAttack);
@@ -489,9 +458,9 @@ namespace Momotaro.Actor.Characters.BossObj
 
                 //ターゲットの位置情報を取得
                 playerPos =
-                    mediator.GetPlayer().GetPosition();
+                    mediator.GetPlayer().Position;
                 //ターゲットと自分との距離を取得
-                length = (playerPos - position).Length();
+                length = (playerPos - Position).Length();
                 if (length >= 500)　//ある程度距離が空いている
                 {
                     time = 1f;
@@ -504,7 +473,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 //ターゲットとの距離に応じてタイマーをセット
                 CD = new CountDownTimer(time);
                 //ターゲットが移動していない
-                if (playerPos == mediator.GetPlayer().GetPosition())
+                if (playerPos == mediator.GetPlayer().Position)
                 {
                     stateNum += 1;　//攻撃段階を進める
                 }
@@ -519,7 +488,7 @@ namespace Momotaro.Actor.Characters.BossObj
                 if (CD.IsTime())　//タイマーが時間切れになったら
                 {
                     //気玉を放出
-                    mediator.AddCharacter(new BossBulletZ(position, playerPos, GameDevice.Instance()));
+                    mediator.AddCharacter(new BossBulletZ(Position, playerPos, GameDevice.Instance()));
                     //攻撃段階を進める
                     stateNum += 1;
                 }
@@ -568,16 +537,16 @@ namespace Momotaro.Actor.Characters.BossObj
                 if (times % 1 == 0)//一定間隔で特定処理
                 {
                     //ターゲットの位置情報を取得
-                    playerPos = mediator.GetPlayer().GetPosition();
+                    playerPos = mediator.GetPlayer().Position;
                     //自分とターゲットとの距離を取得
-                    length = (playerPos - position).Length();
+                    length = (playerPos - Position).Length();
                     bulletNum += 2;
                     attackNum += 1;
 
                     //ターゲットとの距離に応じて気玉を放出
                     for (int i = 0; i < bulletNum; i++)
                     {
-                        mediator.AddCharacter(new BossBullet(position, gameDevice, i * 10));
+                        mediator.AddCharacter(new BossBullet(Position, gameDevice, i * 10));
 
                     }
                 }
@@ -615,9 +584,9 @@ namespace Momotaro.Actor.Characters.BossObj
 
                 color = Color.Red;　//赤く発色
                 timeS = time.Now();　//長いカウントアップタイマーの現在時間を取得
-                playerPos = mediator.GetPlayer().GetPosition();　//ターゲットの位置情報を取得
+                playerPos = mediator.GetPlayer().Position;　//ターゲットの位置情報を取得
                 //ターゲットが移動していないなら
-                if (playerPos == mediator.GetPlayer().GetPosition())
+                if (playerPos == mediator.GetPlayer().Position)
                 {
                     //攻撃段階を進める
                     stateNum += 1;
@@ -631,17 +600,17 @@ namespace Momotaro.Actor.Characters.BossObj
                 if (CD.IsTime())　//時間切れになったら
                 {
                     //自分とターゲットとの距離を計算
-                    velocity = playerPos - position;
+                    velocity = playerPos - Position;
                     //ターゲットへの方向のみ取得
                     velocity.Normalize();
                     //ターゲットとの距離がある程度離れている
-                    if ((position - playerPos).Length() > 20)
+                    if ((Position - playerPos).Length() > 20)
                     {
                         //ターゲットに向かって突進
-                        position += velocity * 15f;
+                        Position += velocity * 15f;
                     }
                     //ターゲットとの距離がある程度近い
-                    else if ((position - playerPos).Length() <= 20)
+                    else if ((Position - playerPos).Length() <= 20)
                     {
                         CD = new CountDownTimer(1.5f);
 

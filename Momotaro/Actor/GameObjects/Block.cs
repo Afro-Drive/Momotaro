@@ -30,7 +30,7 @@ namespace Momotaro.Actor.GameObjects
         /// </summary>
         /// <param name="other"></param>
         public Block(Block other)
-            : this(other.position, other.gameDevice, other.chipNum)
+            : this(other.Position, other.gameDevice, other.chipNum)
         {
 
         }
@@ -81,7 +81,7 @@ namespace Momotaro.Actor.GameObjects
         {
             renderer.DrawTexture(
                 name,
-                position + gameDevice.GetDisplayModify(),
+                Position + gameDevice.GetDisplayModify(),
                 //マップチップの画像の切り取り位置を指定
                 new Rectangle(64 * ((chipNum - 1) % 3), 64 * ((chipNum - 1) / 3), 64, 64),
                 Color.White);

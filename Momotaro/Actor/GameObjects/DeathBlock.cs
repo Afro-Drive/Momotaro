@@ -17,7 +17,7 @@ namespace Momotaro.Actor.GameObjects
         }
 
         public DeathBlock(DeathBlock other)
-            : this(other.position, other.gameDevice)
+            : this(other.Position, other.gameDevice)
         {
 
         }

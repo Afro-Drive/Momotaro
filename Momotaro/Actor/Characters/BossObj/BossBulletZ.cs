@@ -71,7 +71,7 @@ namespace Momotaro.Actor.Characters.BossObj
             //ターゲットへの方向のみを取得
             velocity.Normalize();
             //ターゲットに向かって進む
-            position += velocity * 15;
+            Position += velocity * 15;
         }
     }
 }

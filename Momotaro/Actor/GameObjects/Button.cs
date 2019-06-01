@@ -47,7 +47,7 @@ namespace Momotaro.Actor.GameObjects
         }
 
         public Button(Button other) 
-            : this(other.position, other.gameDevice, other.mediator)
+            : this(other.Position, other.gameDevice, other.mediator)
         {
 
         }

@@ -21,7 +21,7 @@ namespace Momotaro.Actor.GameObjects
         }
 
         public Door(Door other)
-            : this(other.position, other.gameDevice)
+            : this(other.Position, other.gameDevice)
         {
 
         }

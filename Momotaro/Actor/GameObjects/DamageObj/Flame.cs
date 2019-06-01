@@ -32,7 +32,7 @@ namespace Momotaro.Actor.GameObjects.DamageObj
         /// </summary>
         /// <param name="other"></param>
         public Flame(Flame other)
-            :this(other.position,other.gameDevice, other.time)
+            :this(other.Position,other.gameDevice, other.time)
         {
 
         }

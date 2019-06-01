@@ -34,7 +34,7 @@ namespace Momotaro.Actor.AI
 
         public EnemyAI(Character character, IGameObjectMediator mediator)
         {
-            position = character.GetPosition();
+            position = character.Position;
             isJump = true;
 
             this.mediator = mediator;
@@ -42,10 +42,10 @@ namespace Momotaro.Actor.AI
             rnd = GameDevice.Instance().GetRandom();
 
             //マップ当たり判定用リストの作成
-            int width = character.GetWidth();
-            int height = character.GetHeight();
-            int widthMargin = character.GetWidhtMargin();
-            int heightMargin = character.GetHeigthMargin();
+            int width = character.Width;
+            int height = character.Height;
+            int widthMargin = character.WidthMargin;
+            int heightMargin = character.HeightMargin;
             checkRList = new List<Vector2>()
             {
                 new Vector2(width - widthMargin, heightMargin),

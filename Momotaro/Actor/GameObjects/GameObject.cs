@@ -10,27 +10,12 @@ using Momotaro.Util;
 
 namespace Momotaro.Actor.GameObjects
 {
-
-    /// <summary>
-    /// 当たった時の方向
-    /// </summary>
-    enum Direction
-    {
-        Top,   //上
-        Bottom,//下
-        Left,  //左
-        Right  //右
-    }
-
     /// <summary>
     /// 抽象ゲームオブジェクトクラス
     /// </summary>
     abstract class GameObject : ICloneable //コピー機能を追加
     {
         protected string name; //アセット名
-        protected Vector2 position; //位置
-        protected int width; //幅
-        protected int height; //高さ
         protected bool isDeadFlag = false; //死亡フラグ
         protected GameDevice gameDevice; //ゲームデバイス
         protected bool isChangeFlag = false;
@@ -39,6 +24,11 @@ namespace Momotaro.Actor.GameObjects
 
         protected Dictionary<string, Motion> motionDict; //【追加】モーション管理用ディクショナリ
         protected Motion currentMotion; //【追加】現在使用中のモーション
+
+        //座標・当たり判定のプロパティ
+        public Vector2 Position { get; set; }
+        public int Width { get; }
+        public int Height { get; }
 
         /// <summary>
         /// コンストラクタ
@@ -52,49 +42,13 @@ namespace Momotaro.Actor.GameObjects
             int width, int height, GameDevice gameDevice)
         {
             this.name = name;
-            this.position = position;
-            this.width = width;
-            this.height = height;
+            this.Position = position;
+            this.Width = width;
+            this.Height = height;
             this.gameDevice = gameDevice;
 
             motionDict = null; //【追加】最初は空っぽで初期化
             currentMotion = null; //【追加】最初は空っぽで初期化
-        }
-
-        /// <summary>
-        /// 位置の設定
-        /// </summary>
-        /// <param name="position">設定した位置</param>
-        public void SetPosition(Vector2 position)
-        {
-            this.position = position;
-        }
-
-        /// <summary>
-        /// 位置の取得
-        /// </summary>
-        /// <returns>ゲームオブジェクトの位置</returns>
-        public Vector2 GetPosition()
-        {
-            return position;
-        }
-
-        /// <summary>
-        /// オブジェクト幅の取得
-        /// </summary>
-        /// <returns></returns>
-        public int GetWidth()
-        {
-            return width;
-        }
-
-        /// <summary>
-        /// オブジェクトの高さの取得
-        /// </summary>
-        /// <returns></returns>
-        public int GetHeight()
-        {
-            return height;
         }
 
         //抽象メソッド
@@ -111,7 +65,7 @@ namespace Momotaro.Actor.GameObjects
         /// <param name="renderer">描画オブジェクト</param>
         public virtual void Draw(Renderer renderer)
         {
-            renderer.DrawTexture(name, position + gameDevice.GetDisplayModify());
+            renderer.DrawTexture(name, Position + gameDevice.GetDisplayModify());
         }
 
         /// <summary>
@@ -133,10 +87,10 @@ namespace Momotaro.Actor.GameObjects
             Rectangle area = new Rectangle();
 
             //位置と幅、高さを設定
-            area.X = (int)position.X;
-            area.Y = (int)position.Y;
-            area.Height = height;
-            area.Width = width;
+            area.X = (int)Position.X;
+            area.Y = (int)Position.Y;
+            area.Height = Height;
+            area.Width = Width; 
 
             return area;
         }

@@ -45,7 +45,7 @@ namespace Momotaro.Actor.GameObjects
         }
 
         public MessageBox(MessageBox other)
-            : this(other.position, other.gameDevice, other.fileName)
+            : this(other.Position, other.gameDevice, other.fileName)
         {
 
         }
@@ -96,7 +96,7 @@ namespace Momotaro.Actor.GameObjects
         {
             renderer.DrawTexture(
                 name, 
-                position + gameDevice.GetDisplayModify(), 
+                Position + gameDevice.GetDisplayModify(), 
                 motion.DrawingRange(), 
                 Color.White);
 
@@ -111,7 +111,7 @@ namespace Momotaro.Actor.GameObjects
 
                 renderer.DrawString(
                     message,
-                    position + new Vector2(-96, -192) + gameDevice.GetDisplayModify(),
+                    Position + new Vector2(-96, -192) + gameDevice.GetDisplayModify(),
                     color);
             }
         }

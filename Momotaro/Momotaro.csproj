@@ -43,8 +43,11 @@
   <ItemGroup>
     <Compile Include="Actor\AI\AIName.cs" />
     <Compile Include="Actor\Characters\Attack.cs" />
+    <Compile Include="Actor\Characters\BossObj\BossState.cs" />
+    <Compile Include="Actor\Characters\CharaState.cs" />
     <Compile Include="Actor\Characters\MotionName.cs" />
     <Compile Include="Actor\Characters\Player\Bird.cs" />
+    <Compile Include="Actor\GameObjects\Direction.cs" />
     <Compile Include="Actor\GameObjects\PlayerAddBlock\BirdAddBlock.cs" />
     <Compile Include="Actor\GameObjects\Block.cs" />
     <Compile Include="Actor\Characters\BossObj\Boss.cs" />
@@ -80,6 +83,7 @@
     <Compile Include="Actor\GameObjects\Space.cs" />
     <Compile Include="Actor\GameObjects\DamageObj\Trap.cs" />
     <Compile Include="Actor\AI\TurnEnemyAI.cs" />
+    <Compile Include="Def\BlockSize.cs" />
     <Compile Include="Def\Screen.cs" />
     <Compile Include="Device\BGMLoader.cs" />
     <Compile Include="Device\CSVReader.cs" />

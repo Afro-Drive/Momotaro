@@ -26,7 +26,7 @@ namespace Momotaro.Actor.GameObjects
         /// </summary>
         /// <param name="other"></param>
         public ClearBlock(ClearBlock other)
-            :this(other.position, other.gameDevice)
+            :this(other.Position, other.gameDevice)
         { }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Momotaro.Actor.GameObjects
 
         public override void Draw(Renderer renderer)
         {
-            renderer.DrawTexture(name, position + new Vector2(0, -64)+gameDevice.GetDisplayModify());
+            renderer.DrawTexture(name, Position + new Vector2(0, -64)+gameDevice.GetDisplayModify());
         }
     }
 }

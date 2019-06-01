@@ -23,7 +23,7 @@ namespace Momotaro.Actor.Characters
         {
             this.human = human;
             this.dir = dir; 
-            this.position = human.SetPlayerPosition(ref position) + new Vector2(human.GetWidth() / 2 - GetWidth() / 2, 0); ;
+            this.Position = human.SetPlayerPosition(ref position) + new Vector2(human.Width/ 2 - Width/ 2, 0); ;
             time = new CountDownTimer(0.1f);
         }
 
@@ -41,9 +41,9 @@ namespace Momotaro.Actor.Characters
         public override void Update(GameTime gameTime)
         {
             if (dir == Direction.Right)
-                position += new Vector2(20, 0);
+                Position += new Vector2(20, 0);
             else if (dir == Direction.Left)
-                position += new Vector2(-20, 0);
+                Position += new Vector2(-20, 0);
 
             time.Update(gameTime);
                 

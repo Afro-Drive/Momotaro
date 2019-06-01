@@ -17,7 +17,7 @@ namespace Momotaro.Actor.GameObjects.DamageObj
         }
 
         public Thorn(Thorn other)
-            :this(other.position,other.gameDevice)
+            :this(other.Position,other.gameDevice)
         {
 
         }

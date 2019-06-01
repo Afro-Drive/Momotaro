@@ -29,7 +29,7 @@ namespace Momotaro.Actor.GameObjects.ItemObj
         }
 
         public Peach(Peach other)
-            : this(other.position, other.gameDevice, other.mediator) { }
+            : this(other.Position, other.gameDevice, other.mediator) { }
 
         public override void Change()
         {

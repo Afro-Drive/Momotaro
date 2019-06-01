@@ -36,7 +36,7 @@ namespace Momotaro.Actor.AI
             {
                 bulletCnt = 0;
 
-                float targetPosX = mediator.GetPlayer().GetPosition().X;
+                float targetPosX = mediator.GetPlayer().Position.X;
                 float distance = Math.Abs(this.position.X - targetPosX);
 
                 if (distance < 1500f)

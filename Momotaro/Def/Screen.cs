@@ -12,7 +12,7 @@ namespace Momotaro.Def
     static class Screen
     {
         //C#
-        public static readonly int Width = 1280;//画面横幅
-        public static readonly int Height = 720;//画面縦幅
+        public static readonly int WIDTH = 1280;//画面横幅
+        public static readonly int HEIGHT = 720;//画面縦幅
     }
 }

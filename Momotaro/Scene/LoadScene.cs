@@ -270,7 +270,7 @@ namespace Momotaro.Scene
                     null,
                     0.0f,
                     Vector2.Zero,
-                    new Vector2(rate * Screen.Width, 20));
+                    new Vector2(rate * Screen.WIDTH, 20));
             }
 
             //終了

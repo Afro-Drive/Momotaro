@@ -27,7 +27,7 @@ namespace Momotaro.Actor.GameObjects
         /// </summary>
         /// <param name="other">コピー元のオブジェクト</param>
         public Space(Space other)
-            : this(other.position, other.gameDevice) //自分のコンストラクタ呼び出し
+            : this(other.Position, other.gameDevice) //自分のコンストラクタ呼び出し
         {
 
         }

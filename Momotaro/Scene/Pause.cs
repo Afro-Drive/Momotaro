@@ -39,7 +39,7 @@ namespace Momotaro.Scene
             //renderer.DrawString("Pause", new Vector2(64, 64), Color.Blue, alpha);
             renderer.DrawTexture(
                 "pausebg", 
-                new Vector2((Screen.Width - 1024)/2, (Screen.Height - 576)/2));
+                new Vector2((Screen.WIDTH - 1024)/2, (Screen.HEIGHT - 576)/2));
             renderer.End();
         }
 

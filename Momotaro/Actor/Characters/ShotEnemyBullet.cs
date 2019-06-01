@@ -37,7 +37,7 @@ namespace Momotaro.Actor.Characters
 
         public override void Update(GameTime gameTime)
         {
-            position += velocity;
+            Position += velocity;
 
             velocity.Y = velocity.Y + 0.4f;
             velocity.Y = (velocity.Y > 16.0f) ? (16) : (velocity.Y);

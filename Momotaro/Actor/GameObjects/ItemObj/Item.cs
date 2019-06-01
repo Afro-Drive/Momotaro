@@ -38,7 +38,7 @@ namespace Momotaro.Actor.GameObjects.ItemObj
         /// </summary>
         /// <param name="other"></param>
         public Item(Item other)
-            :this (other.position,other.gameDevice,other.mediator)
+            :this (other.Position,other.gameDevice,other.mediator)
         {
 
         }

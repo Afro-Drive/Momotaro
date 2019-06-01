@@ -43,8 +43,8 @@ namespace Momotaro
             Content.RootDirectory = "Content";
 
             //画面サイズ設定
-            graphicsDeviceManager.PreferredBackBufferWidth = Screen.Width;
-            graphicsDeviceManager.PreferredBackBufferHeight = Screen.Height;
+            graphicsDeviceManager.PreferredBackBufferWidth = Screen.WIDTH;
+            graphicsDeviceManager.PreferredBackBufferHeight = Screen.HEIGHT;
         }
 
         /// <summary>
